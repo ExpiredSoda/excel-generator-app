@@ -1,3 +1,6 @@
+/* =========================
+   Global Styles & Body
+   ========================= */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -5,7 +8,9 @@ body {
   color: #202020;
 }
 
-/* Banner/Header */
+/* =========================
+   Banner/Header
+   ========================= */
 .banner {
   width: 100%;
   height: 400px;
@@ -22,14 +27,18 @@ body {
   display: block;
 }
 
-/* Layout: Sidebar and Content */
+/* =========================
+   Layout: Sidebar & Content
+   ========================= */
 .layout {
   display: flex;
   flex-direction: row;
   min-height: 80vh;
 }
 
-/* Sidebar Navigation */
+/* =========================
+   Sidebar Navigation
+   ========================= */
 .sidebar {
   background: #f4f8f6;
   min-width: 220px;
@@ -42,7 +51,7 @@ body {
 }
 .sidebar ul {
   list-style: none;
-  padding: 0 0 0 0px;
+  padding: 0;
   margin: 0;
   width: 90%;
 }
@@ -66,7 +75,9 @@ body {
   height: 32px;
 }
 
-/* Main Content */
+/* =========================
+   Main Content Area
+   ========================= */
 .main-content {
   flex: 1;
   padding: 40px 48px;
@@ -74,7 +85,19 @@ body {
   min-height: 600px;
 }
 
-/* Responsive (Optional) */
+/* =========================
+   Download Button (Calendar)
+   ========================= */
+#downloadTestZipBtn {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================
+   Responsive Design
+   ========================= */
 @media (max-width: 800px) {
   .layout {
     flex-direction: column;

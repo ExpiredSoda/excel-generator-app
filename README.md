@@ -1,86 +1,95 @@
 # Excel Generator App
 
-A beginner-friendly web app for generating custom Excel tools (calendars, schedules, and more).  
-This project is coded from scratch as a learning and portfolio experience, with step-by-step documentation.
+A web app for generating custom Excel resources (calendars, schedules, and more) entirely client-side. Built from scratch for learning, portfolio, and practical use.
 
-## Project Setup
+---
 
-- Project folder structure created:
-  - `index.html` (main page)
-  - `style.css` (site styles)
-  - `script.js` (site logic)
-  - `/images` (all banners and icons)
-- Assets designed and imported (icons, banner).
-- Initialized git, created GitHub repository, pushed initial files.
+## Project Structure
 
-## Progress Log
+- `index.html` — Main HTML page, with banner, sidebar navigation, and dynamic content area.
+- `style.css` — All site styles: layout, sidebar, banner, responsive design.
+- `script.js` — All logic: navigation, calendar builder, Excel XML/ZIP generation, and download.
+- `/images/` — All icons and banner assets (SVGs).
 
-- [X] Site layout (banner, sidebar, main content area)
-- [x] Updated HTML: Removed redundant banner text, added dynamic ad slot, clarified sidebar/content structure, and added homepage welcome/description.
-- [x] Built project folder structure in VS Code and added initial assets (banner and icons).
-- [x] Connected local project to GitHub with version control.
-- [x] Created HTML skeleton with banner, sidebar, main content area, and placeholder navigation.
-- [x] Documented and committed each feature and major layout change.
-- [x] Implemented full-width banner using CSS background image, with custom height for best fit.
-- [x] Refined sidebar navigation with added padding and spacing for usability.
-- [x] Styled sidebar navigation with improved active/hover highlighting for accessibility and clarity.
-- [x] Added and styled main content welcome panel.
-- [x] Verified responsive layout and updated CSS for mobile/desktop flexibility.
-- [x] Actively documenting lessons learned and coding concepts (HTML/CSS/box model/symbols).
-- [x] Added interactive calendar builder form (year/month input, generate button).
-- [x] Implemented dynamic calendar preview using JavaScript.
-- [x] Learned about event listeners for forms and generating HTML dynamically.
-- [x] Completed navigation logic: sidebar switches content and highlights selected tool.
-- [x] Built and wired up a working calendar builder form (year/month), previewed as a dynamic HTML table.
-- [x] Used JavaScript event listeners and DOM manipulation for a single-page app experience.
-- [ ] Calendar tool form and UI
-- [ ] HTML table preview for calendar
-- [ ] CSV export functionality
-- [ ] README updates at every major step
+---
+
+## Features & Progress
+
+- [x] Responsive site layout: banner, sidebar, main content area
+- [x] Sidebar navigation with active/highlight states
+- [x] Dynamic single-page navigation (no reloads)
+- [x] Interactive calendar builder form (year/month/event rows)
+- [x] Live HTML calendar preview
+- [x] Downloadable Excel calendar (.xlsx) with:
+  - Compact, professional grid (no empty rows)
+  - Floating, styled legend panel (DrawingML, not worksheet cells)
+  - User-selectable event rows per day (1–9)
+  - User-tunable legend layout (panel/header/pills)
+  - No Excel repair errors
+- [x] All Excel file generation is 100% client-side (no server)
+- [x] Modern, maintainable code with clear comments and section headers
+- [x] Fully documented project structure and lessons learned
+
+---
 
 ## Notes
 
-- All layout, spacing, and visual design is achieved through external CSS (`style.css`) for maintainability.
-- Banner image and sidebar icons are stored in the `/images` directory and referenced in the HTML and CSS.
-- Project is designed for maximum readability, accessibility, and ease of use as both a learning project and portfolio piece.
+- All layout and visual design is handled in `style.css` for maintainability.
+- All Excel file generation (XML, ZIP) is handled in `script.js`.
+- Banner and sidebar icons are in `/images` and referenced in HTML/CSS.
+- No external dependencies or build tools required.
+- Project is designed for readability, accessibility, and ease of future extension.
+
+---
 
 ## Lessons Learned
 
-- No need to memorize all code—practice, experimentation, and reading docs is how developers really learn.
-- Keeping a well-organized project structure (separate folders for images, CSS, etc.) makes development faster and less confusing.
-- HTML provides the structure (“bones”) of the website, while CSS controls all layout, color, and visual style.
-- Most site elements (like sidebars, banners) start off looking plain and unstyled until CSS is added.
-- Flexbox is a powerful CSS layout tool for creating sidebars and responsive designs.
-- “Padding” adds space inside an element’s border, while “margin” adds space outside it.
-- It’s easier to iterate and make design tweaks with external CSS rather than inline styles.
-- JavaScript lets you respond to user actions and update the page without reloading.
-- DOM (Document Object Model) methods like `getElementById` and `querySelector` let you find and change elements in the HTML.
-- Event listeners make your site interactive (e.g., `element.addEventListener("click", ...)`).
-- Functions keep your code organized and reusable.
+- **Separation of Concerns:** HTML for structure, CSS for layout/appearance, JS for logic and interactivity.
+- **Flexbox** is ideal for responsive layouts (sidebars, main content, navigation).
+- **DOM manipulation** and event listeners enable dynamic, single-page app behavior.
+- **Excel Open XML**: You can generate valid Excel files by hand-crafting XML and packaging with ZIP, as long as you follow the spec (no duplicate tags, correct relationships, etc.).
+- **DrawingML**: Floating shapes (legend panels, pills) are possible in Excel by generating DrawingML and linking it via relationships.
+- **Client-side ZIP**: You can create ZIP files in-browser with just JavaScript and basic byte manipulation.
+- **Iterative Design:** Start simple, then refine layout, appearance, and features based on real output and user feedback.
+- **Commenting and Sectioning:** Clear section headers and concise comments make code much easier to maintain and extend.
+- **No need to memorize everything:** Use documentation, experiment, and keep a reference (like this README) for future work.
 
-## Glossary of Terms Learned
+---
 
-| Term             | Meaning                                                                                    |
-|------------------|--------------------------------------------------------------------------------------------|
-| **HTML**         | HyperText Markup Language; the basic structure of web pages.                               |
-| **CSS**          | Cascading Style Sheets; defines the appearance and layout of HTML elements.                |
-| **Selector**     | In CSS, a way to target HTML elements (like `.sidebar` or `nav`).                          |
-| **Class (`.`)**  | A reusable label for styling/grouping HTML elements, e.g., `<div class="sidebar">`.        |
-| **Property**     | In CSS, a style rule (like `color`, `background`, `padding`).                              |
-| **Value**        | The setting for a property (e.g., `color: #20b388;`).                                    |
-| **Block `{}`**   | Groups properties in CSS or code statements in JS.                                         |
-| **Semicolon `;`**| Ends a statement in CSS or JS.                                                             |
-| **Padding**      | Space inside an element, between the border and content.                                   |
-| **Margin**       | Space outside an element’s border, separating it from other elements.                      |
-| **Flexbox**      | CSS layout mode for aligning and distributing space among items in a container.            |
-| **Responsive**   | Designs that adapt to different screen sizes (mobile, tablet, desktop).                    |
-| **Sidebar**      | A vertical navigation area, often on the left side of the screen.                          |
-| **Active**       | The current or selected navigation item, highlighted for the user.                         |
-| **Hover**        | The style shown when the mouse is over an element.                                         |
-| **Commit**       | A saved change in your code tracked by git (version control).                              |
-| **Push**         | Uploading your commits to GitHub or another remote repository.                             |
-| **README.md**    | A markdown file describing your project, instructions, and progress log.                   |
-| **Dom**          | Document Object Model; how JavaScript “sees” and changes HTML                              |
-| **EventListener**| Code that waits for and responds to user actions (like clicks)                             |
-|**Function**      | A reusable block of code that does something specific                                      |
-| **innerHTML**    | The HTML content inside an element; you can set/change it                                  |
+## Glossary
+
+| Term                | Meaning                                                                                 |
+|---------------------|-----------------------------------------------------------------------------------------|
+| **HTML**            | HyperText Markup Language; the structure of web pages.                                  |
+| **CSS**             | Cascading Style Sheets; controls appearance and layout of HTML elements.                |
+| **JavaScript (JS)** | Programming language for interactivity and logic in web apps.                          |
+| **DOM**             | Document Object Model; how JS accesses and manipulates HTML elements.                   |
+| **Event Listener**  | JS code that responds to user actions (clicks, form submits, etc.).                    |
+| **Flexbox**         | CSS layout mode for flexible, responsive designs.                                       |
+| **Sidebar**         | Vertical navigation area, usually on the left.                                          |
+| **Active/Highlight**| Visual state for the selected navigation item.                                          |
+| **DrawingML**       | XML format for shapes/graphics in Excel (used for floating legend panel/pills).         |
+| **Excel Open XML**  | The zipped XML file format used by modern Excel (.xlsx).                               |
+| **ZIP**             | Compressed archive format; Excel files are ZIPs of XML and assets.                      |
+| **Blob**            | JS object for handling binary data (used for downloads).                                |
+| **Section Header**  | A comment block marking a major part of the code for clarity.                          |
+| **Responsive**      | Design that adapts to different screen sizes.                                           |
+| **Merge**           | In Excel, combining multiple cells into one (e.g., for headers).                        |
+| **Client-side**     | All code runs in the browser; no server or backend required.                            |
+| **Single-page app** | Web app that updates content dynamically without reloading the page.                    |
+
+---
+
+## How to Use / Extend
+
+- To add new Excel tools (e.g., schedules), create a new navigation item, form, and generator function in `script.js`.
+- To change the look, edit `style.css` (colors, spacing, layout).
+- To update icons or banners, replace SVGs in `/images` and update references in HTML/CSS.
+- Use this README as your reference for structure, terminology, and best practices.
+
+---
+
+## Author & License
+
+- Created by [Your Name] as a learning and portfolio project.
+- MIT License. Free to use, modify, and share.
