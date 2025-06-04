@@ -1,95 +1,181 @@
-# Excel Generator App
+# Free Excel Generators
 
-A web app for generating custom Excel resources (calendars, schedules, and more) entirely client-side. Built from scratch for learning, portfolio, and practical use.
+A web app for generating custom Excel resources entirely client-side. Currently features a powerful calendar generator with plans for additional tools like tournament schedulers.
 
 ---
 
 ## Project Structure
 
-- `index.html` — Main HTML page, with banner, sidebar navigation, and dynamic content area.
-- `style.css` — All site styles: layout, sidebar, banner, responsive design.
-- `script.js` — All logic: navigation, calendar builder, Excel XML/ZIP generation, and download.
-- `/images/` — All icons and banner assets (SVGs).
+- `index.html` — Main HTML page with banner, sidebar navigation, and dynamic content area
+- `style.css` — Complete site styling: layout, sidebar, banner, responsive design
+- `script.js` — Core application logic: navigation, Excel generation, ZIP creation, and downloads
+- `images/` — SVG icons and assets for the interface
+- `README.md` — Project documentation and technical reference
 
 ---
 
 ## Features & Progress
 
-- [x] Responsive site layout: banner, sidebar, main content area
-- [x] Sidebar navigation with active/highlight states
-- [x] Dynamic single-page navigation (no reloads)
-- [x] Interactive calendar builder form (year/month/event rows)
-- [x] Live HTML calendar preview
-- [x] Downloadable Excel calendar (.xlsx) with:
-  - Compact, professional grid (no empty rows)
-  - Floating, styled legend panel (DrawingML, not worksheet cells)
-  - User-selectable event rows per day (1–9)
-  - User-tunable legend layout (panel/header/pills)
-  - No Excel repair errors
-- [x] All Excel file generation is 100% client-side (no server)
-- [x] Modern, maintainable code with clear comments and section headers
-- [x] Fully documented project structure and lessons learned
+### ✅ Completed Features
+- **Responsive Web Interface**: Banner, sidebar navigation, and main content area
+- **Single-Page Application**: Dynamic navigation without page reloads
+- **Calendar Generator**: Interactive form with year/month selection
+- **Event Configuration**: User-selectable event rows per day (1-9 slots)
+- **Optional Tracker Sheet**: Checkbox to include event tracking worksheet
+- **Live Preview**: HTML calendar preview before Excel generation
+- **Excel Export**: Clean .xlsx files with three worksheets:
+  - **Instructions Sheet**: User guide with merged cells and formatting
+  - **Calendar Sheet**: Professional grid layout with cell-based legend
+  - **Tracker Sheet**: Optional event counting and analytics
+- **Client-Side Processing**: 100% browser-based, no server required
+- **Error Prevention**: Eliminated Excel corruption issues through simplified architecture
+
+### 🔄 Architecture Highlights
+- **ExcelBuilder Library**: Custom classes for Excel XML generation
+- **ZIP Generation**: Browser-based ZIP creation for .xlsx format
+- **XML Escaping**: Proper handling of special characters
+- **Color Consistency**: 9-color palette shared between calendar and tracker
+- **Clean Code Structure**: Commented sections and maintainable functions
+
+### 🚧 Planned Features
+- **Round Robin Tournament Scheduler**: Balanced sports scheduling tool
+- **Additional Excel Templates**: Expense trackers, project planners, etc.
+- **Enhanced Customization**: User-defined color schemes and layouts
 
 ---
 
-## Notes
+## Technical Implementation
 
-- All layout and visual design is handled in `style.css` for maintainability.
-- All Excel file generation (XML, ZIP) is handled in `script.js`.
-- Banner and sidebar icons are in `/images` and referenced in HTML/CSS.
-- No external dependencies or build tools required.
-- Project is designed for readability, accessibility, and ease of future extension.
+### Excel Generation Process
+1. **Form Input**: Collect year, month, event rows, and tracker preference
+2. **XML Creation**: Generate all required Excel XML files using custom classes
+3. **ZIP Assembly**: Package XML files into proper .xlsx structure
+4. **Download**: Create browser download using Blob API
+
+### Key Components
+- **ExcelBuilder Classes**: `ExcelCell`, `ExcelRow`, `ExcelSheet`, `ExcelBuilder`
+- **XML Generators**: Functions for workbook, worksheet, styles, and relationships
+- **ZIP Writer**: Minimal ZIP creation without external dependencies
+- **Event Handlers**: Form submission, navigation, and download management
+
+### Excel File Structure
+```
+calendar.xlsx (ZIP container)
+├── [Content_Types].xml
+├── _rels/
+│   └── .rels
+└── xl/
+    ├── workbook.xml
+    ├── styles.xml
+    ├── _rels/
+    │   └── workbook.xml.rels
+    └── worksheets/
+        ├── sheet1.xml (Instructions)
+        ├── sheet2.xml (Calendar)
+        └── sheet3.xml (Tracker - optional)
+```
+
+---
+
+## Development Notes
+
+### Design Principles
+- **Separation of Concerns**: HTML for structure, CSS for styling, JavaScript for logic
+- **No External Dependencies**: Pure vanilla JavaScript and CSS
+- **Client-Side Only**: All processing happens in the browser
+- **Maintainable Code**: Clear section headers, comprehensive comments
+- **Responsive Design**: Works on desktop and mobile devices
+
+### Browser Compatibility
+- **Modern Browsers**: Chrome, Firefox, Safari, Edge (ES6+ required)
+- **JavaScript Features**: Classes, arrow functions, template literals, Map/Set
+- **APIs Used**: DOM manipulation, Blob API, URL.createObjectURL
 
 ---
 
 ## Lessons Learned
 
-- **Separation of Concerns:** HTML for structure, CSS for layout/appearance, JS for logic and interactivity.
-- **Flexbox** is ideal for responsive layouts (sidebars, main content, navigation).
-- **DOM manipulation** and event listeners enable dynamic, single-page app behavior.
-- **Excel Open XML**: You can generate valid Excel files by hand-crafting XML and packaging with ZIP, as long as you follow the spec (no duplicate tags, correct relationships, etc.).
-- **DrawingML**: Floating shapes (legend panels, pills) are possible in Excel by generating DrawingML and linking it via relationships.
-- **Client-side ZIP**: You can create ZIP files in-browser with just JavaScript and basic byte manipulation.
-- **Iterative Design:** Start simple, then refine layout, appearance, and features based on real output and user feedback.
-- **Commenting and Sectioning:** Clear section headers and concise comments make code much easier to maintain and extend.
-- **No need to memorize everything:** Use documentation, experiment, and keep a reference (like this README) for future work.
+### Technical Insights
+- **Excel Open XML**: Hand-crafted XML generation is viable for creating valid .xlsx files
+- **ZIP Generation**: Browser-based ZIP creation using byte manipulation
+- **XML Escaping**: Critical for preventing corruption when handling user input
+- **Cell-Based Legends**: Simpler and more reliable than complex DrawingML shapes
+- **Event-Driven Architecture**: Clean separation between UI and business logic
+
+### Best Practices Applied
+- **Progressive Enhancement**: Start with working HTML/CSS, enhance with JavaScript
+- **Error Prevention**: Validate inputs and handle edge cases gracefully
+- **User Experience**: Live previews and clear feedback for all actions
+- **Code Organization**: Logical grouping with clear section headers
+- **Documentation**: Inline comments and comprehensive README
 
 ---
 
-## Glossary
+## Technical Reference
 
-| Term                | Meaning                                                                                 |
-|---------------------|-----------------------------------------------------------------------------------------|
-| **HTML**            | HyperText Markup Language; the structure of web pages.                                  |
-| **CSS**             | Cascading Style Sheets; controls appearance and layout of HTML elements.                |
-| **JavaScript (JS)** | Programming language for interactivity and logic in web apps.                          |
-| **DOM**             | Document Object Model; how JS accesses and manipulates HTML elements.                   |
-| **Event Listener**  | JS code that responds to user actions (clicks, form submits, etc.).                    |
-| **Flexbox**         | CSS layout mode for flexible, responsive designs.                                       |
-| **Sidebar**         | Vertical navigation area, usually on the left.                                          |
-| **Active/Highlight**| Visual state for the selected navigation item.                                          |
-| **DrawingML**       | XML format for shapes/graphics in Excel (used for floating legend panel/pills).         |
-| **Excel Open XML**  | The zipped XML file format used by modern Excel (.xlsx).                               |
-| **ZIP**             | Compressed archive format; Excel files are ZIPs of XML and assets.                      |
-| **Blob**            | JS object for handling binary data (used for downloads).                                |
-| **Section Header**  | A comment block marking a major part of the code for clarity.                          |
-| **Responsive**      | Design that adapts to different screen sizes.                                           |
-| **Merge**           | In Excel, combining multiple cells into one (e.g., for headers).                        |
-| **Client-side**     | All code runs in the browser; no server or backend required.                            |
-| **Single-page app** | Web app that updates content dynamically without reloading the page.                    |
+### Key Technologies
+| Technology | Purpose | Implementation |
+|------------|---------|----------------|
+| **HTML5** | Page structure and semantic markup | Single-page layout with dynamic content |
+| **CSS3** | Responsive styling and layout | Flexbox-based design, mobile-first approach |
+| **JavaScript ES6+** | Application logic and Excel generation | Classes, modules, async operations |
+| **Excel Open XML** | .xlsx file format specification | Hand-crafted XML for workbooks and worksheets |
+| **ZIP Format** | Container for Excel files | Custom implementation using byte arrays |
+| **DOM API** | User interface manipulation | Event handling, form processing, downloads |
 
----
-
-## How to Use / Extend
-
-- To add new Excel tools (e.g., schedules), create a new navigation item, form, and generator function in `script.js`.
-- To change the look, edit `style.css` (colors, spacing, layout).
-- To update icons or banners, replace SVGs in `/images` and update references in HTML/CSS.
-- Use this README as your reference for structure, terminology, and best practices.
+### Color Palette
+The app uses a consistent 9-color palette for calendar events:
+```javascript
+[
+  "FFDC143C", // Crimson Red
+  "FF228B22", // Forest Green  
+  "FF1E90FF", // Dodger Blue
+  "FFFFA500", // Orange
+  "FF800080", // Purple
+  "FFFFFF00", // Yellow
+  "FF00CED1", // Dark Turquoise
+  "FF8B4513", // Saddle Brown
+  "FF4682B4"  // Steel Blue
+]
+```
 
 ---
 
-## Author & License
+## Usage Instructions
 
-- Created by [Your Name] as a learning and portfolio project.
-- MIT License. Free to use, modify, and share.
+### For End Users
+1. **Navigate**: Use sidebar to access the Calendar Generator
+2. **Configure**: Select year, month, and number of event rows per day
+3. **Preview**: Click "Generate Calendar" to see HTML preview
+4. **Export**: Click "Download ZIP" to get your Excel file
+5. **Customize**: Open in Excel to add events and customize colors
+
+### For Developers
+1. **Setup**: No build process required - open `index.html` in a browser
+2. **Extend**: Add new generators by creating form templates and XML functions
+3. **Customize**: Modify colors, layouts, and styles in `style.css`
+4. **Debug**: Use browser developer tools - all errors logged to console
+
+---
+
+## Project Status
+
+**Current Version**: 1.0 - Production Ready  
+**Last Updated**: June 2025  
+**Status**: ✅ Stable - Excel corruption issues resolved
+
+### Recent Fixes
+- ✅ Removed complex DrawingML to prevent Excel corruption
+- ✅ Implemented robust cell-based legend system  
+- ✅ Added proper XML escaping for special characters
+- ✅ Fixed all JavaScript syntax errors
+- ✅ Ensured consistent color palette across all sheets
+
+---
+
+## License & Attribution
+
+**License**: MIT License - Free to use, modify, and distribute  
+**Created by**: Daniel Planos  
+**Purpose**: Learning project and portfolio demonstration  
+**Repository**: Local development project
