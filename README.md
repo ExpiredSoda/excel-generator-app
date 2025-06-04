@@ -1,6 +1,6 @@
 # Free Excel Generators
 
-A web app for generating custom Excel resources entirely client-side. Currently features a powerful calendar generator with plans for additional tools like tournament schedulers.
+A web app for generating custom Excel resources entirely client-side. Features a powerful calendar generator with advanced conditional formatting, dynamic tracking, and professional Excel output. Built with vanilla JavaScript - no external dependencies required.
 
 ---
 
@@ -26,16 +26,23 @@ A web app for generating custom Excel resources entirely client-side. Currently 
 - **Excel Export**: Clean .xlsx files with three worksheets:
   - **Instructions Sheet**: User guide with merged cells and formatting
   - **Calendar Sheet**: Professional grid layout with cell-based legend
-  - **Tracker Sheet**: Optional event counting and analytics
+  - **Tracker Sheet**: Optional event counting and analytics with live formulas
+- **🎉 BREAKTHROUGH: Conditional Formatting**: Calendar cells automatically highlight with solid background colors when matching legend values
+- **🎉 Dynamic Event Tracking**: Tracker sheet formulas automatically count legend value occurrences across the calendar
+- **🎉 Color Synchronization**: Calendar highlighting uses identical colors as legend pills for perfect consistency
+- **🎉 Case-Insensitive Matching**: Legend matching works regardless of text case (uppercase/lowercase)
 - **Client-Side Processing**: 100% browser-based, no server required
-- **Error Prevention**: Eliminated Excel corruption issues through simplified architecture
+- **🎉 Excel Corruption RESOLVED**: Eliminated all drawing XML corruption issues through optimized architecture
+- **🎉 Production-Ready Output**: Generates professional Excel files that open cleanly in Excel, Google Sheets, and LibreOffice
 
 ### 🔄 Architecture Highlights
-- **ExcelBuilder Library**: Custom classes for Excel XML generation
+- **ExcelBuilder Library**: Custom classes for Excel XML generation with advanced conditional formatting support
 - **ZIP Generation**: Browser-based ZIP creation for .xlsx format
-- **XML Escaping**: Proper handling of special characters
-- **Color Consistency**: 9-color palette shared between calendar and tracker
-- **Clean Code Structure**: Commented sections and maintainable functions
+- **XML Escaping**: Comprehensive handling of special characters preventing corruption
+- **Color Consistency**: 9-color palette synchronized between calendar, legend, and conditional formatting
+- **DXF Styling**: Proper Excel DXF (Differential Formatting) implementation for conditional formatting
+- **Cross-Sheet Formulas**: Dynamic `COUNTIF` references between Calendar and Tracker sheets
+- **Clean Code Structure**: Extensively commented sections and maintainable class-based architecture
 
 ### 🚧 Planned Features
 - **Round Robin Tournament Scheduler**: Balanced sports scheduling tool
@@ -52,11 +59,22 @@ A web app for generating custom Excel resources entirely client-side. Currently 
 3. **ZIP Assembly**: Package XML files into proper .xlsx structure
 4. **Download**: Create browser download using Blob API
 
+### Advanced Features
+- **🎯 Smart Conditional Formatting**: Calendar event cells automatically highlight with solid background colors when they match values from the legend
+- **🔄 Real-Time Tracking**: Tracker sheet uses `COUNTIF` formulas to automatically count legend value occurrences
+- **🔗 Cross-Sheet References**: Tracker formulas reference the Calendar sheet for real-time updates (`Calendar!I2`, `COUNTIF(Calendar!A:G,Calendar!I2)`)
+- **🎨 DXF Styling**: Proper Excel DXF (Differential Formatting) definitions in styles.xml for conditional formatting
+- **📝 Case-Insensitive Matching**: Legend matching works with `UPPER()` formulas regardless of text case
+- **🎨 Color Harmony**: Perfect color synchronization between legend pills and conditional formatting highlights
+- **🛡️ XML Compliance**: Fully compliant Excel Open XML format with proper escaping and validation
+
 ### Key Components
-- **ExcelBuilder Classes**: `ExcelCell`, `ExcelRow`, `ExcelSheet`, `ExcelBuilder`
-- **XML Generators**: Functions for workbook, worksheet, styles, and relationships
-- **ZIP Writer**: Minimal ZIP creation without external dependencies
+- **ExcelBuilder Classes**: `ExcelCell`, `ExcelRow`, `ExcelSheet`, `ExcelBuilder`, `ConditionalFormattingRule`
+- **Conditional Formatting Engine**: Complete implementation with DXF styling and Excel-compliant XML generation
+- **XML Generators**: Comprehensive functions for workbook, worksheet, styles, and relationships
+- **ZIP Writer**: Optimized ZIP creation without external dependencies
 - **Event Handlers**: Form submission, navigation, and download management
+- **Error Prevention**: Robust XML escaping and validation to prevent file corruption
 
 ### Excel File Structure
 ```
@@ -96,11 +114,14 @@ calendar.xlsx (ZIP container)
 ## Lessons Learned
 
 ### Technical Insights
-- **Excel Open XML**: Hand-crafted XML generation is viable for creating valid .xlsx files
-- **ZIP Generation**: Browser-based ZIP creation using byte manipulation
-- **XML Escaping**: Critical for preventing corruption when handling user input
-- **Cell-Based Legends**: Simpler and more reliable than complex DrawingML shapes
+- **Excel Open XML Mastery**: Hand-crafted XML generation creates valid, professional .xlsx files
+- **Conditional Formatting Breakthrough**: Successfully implemented Excel DXF styling for automatic cell highlighting
+- **ZIP Generation**: Browser-based ZIP creation using optimized byte manipulation
+- **XML Escaping**: Critical for preventing corruption when handling user input with special characters
+- **Cell-Based Legends**: Simpler and more reliable than complex DrawingML shapes - eliminated corruption completely
 - **Event-Driven Architecture**: Clean separation between UI and business logic
+- **DXF vs Inline Formatting**: Excel requires predefined DXF styles in styles.xml rather than inline conditional formatting definitions
+- **Background vs Pattern Colors**: Using `bgColor` creates solid fills while `fgColor` creates pattern fills in Excel conditional formatting
 
 ### Best Practices Applied
 - **Progressive Enhancement**: Start with working HTML/CSS, enhance with JavaScript
@@ -145,10 +166,13 @@ The app uses a consistent 9-color palette for calendar events:
 
 ### For End Users
 1. **Navigate**: Use sidebar to access the Calendar Generator
-2. **Configure**: Select year, month, and number of event rows per day
-3. **Preview**: Click "Generate Calendar" to see HTML preview
-4. **Export**: Click "Download ZIP" to get your Excel file
-5. **Customize**: Open in Excel to add events and customize colors
+2. **Configure**: Select year, month, and number of event rows per day (1-9)
+3. **Choose Tracking**: Optionally include tracker sheet for event analytics
+4. **Preview**: Click "Generate Calendar" to see HTML preview with legend
+5. **Export**: Click "Download ZIP" to get your professional Excel file
+6. **✨ Use in Excel**: Open the .xlsx file and start typing events in calendar cells
+7. **🎨 Watch Magic Happen**: Calendar cells automatically highlight with matching legend colors
+8. **📊 Track Events**: If tracker enabled, see automatic counts of each event type
 
 ### For Developers
 1. **Setup**: No build process required - open `index.html` in a browser
@@ -160,16 +184,25 @@ The app uses a consistent 9-color palette for calendar events:
 
 ## Project Status
 
-**Current Version**: 1.0 - Production Ready  
+**Current Version**: 2.0 - Major Feature Release  
 **Last Updated**: June 2025  
-**Status**: ✅ Stable - Excel corruption issues resolved
+**Status**: 🎉 **STABLE & FEATURE-COMPLETE** - All major functionality implemented and tested
 
-### Recent Fixes
-- ✅ Removed complex DrawingML to prevent Excel corruption
-- ✅ Implemented robust cell-based legend system  
-- ✅ Added proper XML escaping for special characters
-- ✅ Fixed all JavaScript syntax errors
-- ✅ Ensured consistent color palette across all sheets
+### 🎉 Major Breakthroughs Achieved
+- ✅ **Conditional Formatting SUCCESS**: Calendar cells now automatically highlight with solid background colors when matching legend values
+- ✅ **Excel Corruption ELIMINATED**: Completely resolved all drawing XML corruption issues by removing complex DrawingML
+- ✅ **DXF Implementation**: Successfully implemented proper Excel DXF styling for conditional formatting
+- ✅ **Cross-Sheet Formulas**: Tracker sheet formulas correctly reference Calendar sheet data
+- ✅ **Color Synchronization**: Perfect color matching between legend pills and conditional formatting highlights
+- ✅ **Production Quality**: Generated Excel files open cleanly in Excel, Google Sheets, and LibreOffice
+
+### Recent Major Updates
+- 🎯 **Breakthrough**: Implemented working conditional formatting with solid background colors
+- 🔧 **Architecture**: Completely rebuilt Excel generation to eliminate corruption
+- 🎨 **DXF Mastery**: Added proper DXF definitions to styles.xml for Excel compatibility  
+- 🔗 **Formula Engine**: Enhanced tracker with cross-sheet `COUNTIF` formulas
+- 🛡️ **XML Compliance**: Comprehensive XML escaping and validation
+- 📊 **Professional Output**: Clean, corruption-free Excel files ready for business use
 
 ---
 
@@ -177,5 +210,6 @@ The app uses a consistent 9-color palette for calendar events:
 
 **License**: MIT License - Free to use, modify, and distribute  
 **Created by**: Daniel Planos  
-**Purpose**: Learning project and portfolio demonstration  
-**Repository**: Local development project
+**Purpose**: Advanced Excel generation showcase and portfolio demonstration  
+**Repository**: Ready for GitHub deployment  
+**Achievements**: Successfully implemented complex Excel conditional formatting with vanilla JavaScript

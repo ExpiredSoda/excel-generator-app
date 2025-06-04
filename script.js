@@ -73,6 +73,7 @@ class ExcelSheet {
     this.rows = [];
     this.merges = [];
     this.cols = [];
+    this.conditionalFormatting = [];
   }
   addRow(row) {
     this.rows.push(row);
@@ -82,9 +83,25 @@ class ExcelSheet {
   }
   setCols(colDefs) {
     this.cols = colDefs;
-  }  toXML() {
+  }  addConditionalFormatting(cf) {
+    this.conditionalFormatting.push(cf);
+  }
+  toXML() {
     let colsXML = this.cols.length ? `<cols>${this.cols.map(c => `<col min="${c.min}" max="${c.max}" width="${c.width}"/>`).join('')}</cols>` : '';
     let mergesXML = this.merges.length ? `<mergeCells count="${this.merges.length}">${this.merges.map(ref => `<mergeCell ref="${ref}"/>`).join('')}</mergeCells>` : '';
+    let conditionalFormattingXML = '';
+    if (this.conditionalFormatting.length > 0) {
+      // Group conditional formatting rules by range
+      const rangeGroups = {};
+      this.conditionalFormatting.forEach(cf => {
+        if (!rangeGroups[cf.sqref]) rangeGroups[cf.sqref] = [];
+        rangeGroups[cf.sqref].push(cf);
+      });
+      
+      conditionalFormattingXML = Object.keys(rangeGroups).map(sqref => 
+        `<conditionalFormatting sqref="${sqref}">${rangeGroups[sqref].map(cf => cf.toXML()).join('')}</conditionalFormatting>`
+      ).join('');
+    }
     // Add xmlns:r for relationships (needed for <drawing r:id=...>)
     return `<?xml version="1.0" encoding="UTF-8"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
@@ -93,7 +110,38 @@ class ExcelSheet {
     ${this.rows.map(r => r.toXML()).join('\n    ')}
   </sheetData>
   ${mergesXML}
+  ${conditionalFormattingXML}
 </worksheet>`;
+  }
+}
+
+class ConditionalFormattingRule {
+  constructor(sqref, formula, fillColor, priority = 1, useExpression = false, dxfId = null) {
+    this.sqref = sqref; // Cell range like "A3:G20"
+    this.formula = formula; // Excel formula like "$I$2"
+    this.fillColor = fillColor; // RGB color like "FFDC143C"
+    this.priority = priority; // Priority for rule evaluation
+    this.useExpression = useExpression; // Whether to use expression type vs cellIs
+    this.dxfId = dxfId; // Reference to DXF style in styles.xml
+  }
+  toXML() {
+    // Reference DXF by ID if provided, otherwise include inline DXF
+    let dxfAttr = '';
+    let dxfXML = '';
+    
+    if (this.dxfId !== null) {
+      dxfAttr = ` dxfId="${this.dxfId}"`;
+    } else {
+      dxfXML = `<dxf><fill><patternFill patternType="solid"><fgColor rgb="${this.fillColor}"/></patternFill></fill></dxf>`;
+    }
+    
+    if (this.useExpression) {
+      // Expression type for complex formulas
+      return `<cfRule type="expression" priority="${this.priority}"${dxfAttr}><formula>${escapeXml(this.formula)}</formula>${dxfXML}</cfRule>`;
+    } else {
+      // CellIs type for simple comparisons
+      return `<cfRule type="cellIs" operator="equal" priority="${this.priority}"${dxfAttr}><formula>${escapeXml(this.formula)}</formula>${dxfXML}</cfRule>`;
+    }
   }
 }
 
@@ -375,7 +423,6 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
     }
     currentRow++;
   }
-
   // Add all rows to the sheet in order
   const allRows = Array.from(rowMap.keys()).sort((a, b) => a - b);
   for (const r of allRows) {
@@ -385,7 +432,45 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
       monthRow.cells.forEach(cell => cell.style = 4); // style 4 is header big+fill+border
     }
     sheet.addRow(rowMap.get(r));
-  }  let xml = sheet.toXML();
+  }  // Add conditional formatting to highlight calendar cells based on legend values
+  // We need to determine the range of calendar event cells (excluding date cells)
+  const lastCalendarRow = Math.max(...allRows.filter(r => r >= calGridStartRow));
+  const calendarEventRange = `A${calGridStartRow + 1}:G${lastCalendarRow}`;
+  console.log(`Calendar grid setup: calGridStartRow=${calGridStartRow}, lastCalendarRow=${lastCalendarRow}, range=${calendarEventRange}`);
+  console.log(`All rows: [${allRows}]`);
+  console.log(`Calendar rows: [${allRows.filter(r => r >= calGridStartRow)}]`);    // Add conditional formatting rules for each legend row
+  const palette = [
+    "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
+    "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
+  ];for (let l = 0; l < eventRows; l++) {
+    const legendRow = headerRow + 1 + l;
+    // Try expression type with UPPER function for case-insensitive matching
+    const formula = `UPPER(A${calGridStartRow + 1})=UPPER($I$${legendRow})`;
+    // Reference DXF by ID (0-based index)
+    const rule = new ConditionalFormattingRule(calendarEventRange, formula, palette[l], l + 1, true, l);
+    console.log(`Adding CF rule ${l + 1}:`);
+    console.log(`  Range: ${calendarEventRange}`);
+    console.log(`  Formula: ${formula}`);
+    console.log(`  Color: ${palette[l]}`);
+    console.log(`  DXF ID: ${l}`);
+    console.log(`  LegendRow: ${legendRow}`);
+    console.log(`  Rule XML: ${rule.toXML()}`);
+    sheet.addConditionalFormatting(rule);
+  }
+    console.log(`Total CF rules: ${sheet.conditionalFormatting.length}`);
+  console.log('CF Rules details:', sheet.conditionalFormatting);
+
+  let xml = sheet.toXML();
+  // Debug: check if conditional formatting XML is actually in the output
+  if (xml.includes('<conditionalFormatting')) {
+    console.log('✓ Conditional formatting XML found in sheet');
+    const cfStart = xml.indexOf('<conditionalFormatting');
+    const cfEnd = xml.indexOf('</conditionalFormatting>') + '</conditionalFormatting>'.length;
+    console.log('CF XML section:', xml.substring(cfStart, cfEnd));
+  } else {
+    console.log('✗ Conditional formatting XML NOT found in sheet');
+  }
+  
   // Remove drawing reference since we're using cells for legend now
   return xml;
 }
@@ -434,21 +519,57 @@ function getStylesXML(eventRows) {
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="2" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 4: Header big+fill+border
     '<xf numFmtId="0" fontId="4" fillId="4" borderId="1" xfId="0"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' // 5: Instruction text+yellow fill+border
   ];
-  
-  for (let i = 0; i < eventRows; i++) {
+    for (let i = 0; i < eventRows; i++) {
     cellXfs.push(`<xf numFmtId="0" fontId="0" fillId="${i + 5}" borderId="1" xfId="0"/>`);
+  }  // Add DXF styles for conditional formatting
+  const dxfs = [];
+  for (let i = 0; i < eventRows; i++) {
+    // For solid background color in conditional formatting, use bgColor
+    dxfs.push(`<dxf><fill><patternFill patternType="solid"><bgColor rgb="${palette[i]}"/></patternFill></fill></dxf>`);
   }
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">\n  <fonts count="${fonts.length}">${fonts.join('')}</fonts>\n  <fills count="${fills.length}">${fills.join('')}</fills>\n  <borders count="${borders.length}">${borders.join('')}</borders>\n  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>\n  <cellXfs count="${cellXfs.length}">${cellXfs.join('')}</cellXfs>\n</styleSheet>`;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="${fonts.length}">${fonts.join('')}</fonts>
+  <fills count="${fills.length}">${fills.join('')}</fills>
+  <borders count="${borders.length}">${borders.join('')}</borders>
+  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+  <cellXfs count="${cellXfs.length}">${cellXfs.join('')}</cellXfs>
+  <dxfs count="${dxfs.length}">${dxfs.join('')}</dxfs>
+</styleSheet>`;
 }
 
 function getTrackerSheetXML(eventRows) {
-  let rows = `<row><c t="inlineStr"><is><t>Legend Value</t></is></c><c t="inlineStr"><is><t>Count</t></is></c></row>`;
+  // Build tracker sheet with formulas that count legend values in calendar
+  const palette = [
+    "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
+    "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
+  ];
+  
+  let rows = `<row r="1">
+    <c r="A1" t="inlineStr" s="1"><is><t>Legend Value</t></is></c>
+    <c r="B1" t="inlineStr" s="1"><is><t>Count</t></is></c>
+    <c r="C1" t="inlineStr" s="1"><is><t>Description</t></is></c>
+  </row>`;
+  
   for (let i = 0; i < eventRows; i++) {
-    rows += `<row><c t="inlineStr"><is><t>Insert Value Here</t></is></c><c t="inlineStr"><is><t>0</t></is></c></row>`;
+    const rowNum = i + 2;    const legendCellRef = `Calendar!I${i + 2}`; // Simple sheet reference without quotes
+    const countFormula = `COUNTIF(Calendar!A:G,Calendar!I${i + 2})`; // Simple sheet reference
+    
+    rows += `<row r="${rowNum}">
+      <c r="A${rowNum}" t="str"><f>=${legendCellRef}</f></c>
+      <c r="B${rowNum}" t="str"><f>=${countFormula}</f></c>
+      <c r="C${rowNum}" t="inlineStr" s="${6 + i}"><is><t>Automatically counted from Calendar sheet</t></is></c>
+    </row>`;
   }
+  
   return `<?xml version="1.0" encoding="UTF-8"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <cols>
+    <col min="1" max="1" width="20"/>
+    <col min="2" max="2" width="8"/>
+    <col min="3" max="3" width="35"/>
+  </cols>
   <sheetData>${rows}</sheetData>
 </worksheet>`;
 }
