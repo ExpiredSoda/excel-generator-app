@@ -167,6 +167,115 @@ class ExcelBuilder {
 // =========================
 
 // =========================
+// Legend Input Security & Management
+// =========================
+
+// Security: Input sanitization and validation
+function sanitizeLegendInput(input) {
+  if (typeof input !== 'string') return '';
+  
+  // Remove any HTML tags, scripts, and dangerous characters
+  let sanitized = input
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/[<>\"'&]/g, '') // Remove dangerous characters
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim();
+  
+  // Limit length to prevent abuse
+  sanitized = sanitized.substring(0, 50);
+  
+  // If empty after sanitization, return default
+  return sanitized || 'Enter Value Here';
+}
+
+// Validation function
+function validateLegendInput(input) {
+  const sanitized = sanitizeLegendInput(input);
+  
+  // Check for suspicious patterns
+  const suspiciousPatterns = [
+    /eval\s*\(/i,
+    /function\s*\(/i,
+    /alert\s*\(/i,
+    /document\./i,
+    /window\./i,
+    /\$\{.*\}/i, // Template literals
+    /\[\s*\]/i, // Array access
+    /\.\s*constructor/i
+  ];
+  
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(sanitized)) {
+      console.warn('Suspicious input detected:', input);
+      return 'Enter Value Here'; // Return safe default
+    }
+  }
+  
+  return sanitized;
+}
+
+// Generate legend input fields based on eventRows selection
+function generateLegendFields(eventRows) {
+  const palette = [
+    "#DC143C", "#228B22", "#1E90FF", "#FFA500", "#800080",
+    "#FFFF00", "#00CED1", "#8B4513", "#4682B4"
+  ];
+  
+  const defaultNames = [
+    "Meeting", "Workout", "Appointment", "Holiday", "Personal",
+    "Work", "Travel", "Study", "Event"
+  ];
+    let html = `
+    <div class="legend-fields">
+      <h4><img src="images/Gear Icon.svg" alt="Settings" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Customize Your Legend Values:</h4>
+  `;
+  
+  for (let i = 0; i < eventRows; i++) {
+    const color = palette[i] || "#888888";
+    const defaultName = defaultNames[i] || `Category ${i + 1}`;
+    
+    html += `
+      <div class="legend-field-group">
+        <div class="legend-color-indicator" style="background-color: ${color};"></div>
+        <input 
+          type="text" 
+          class="legend-input" 
+          id="legend-${i}" 
+          value="${defaultName}"
+          placeholder="Enter legend name"
+          maxlength="50"
+          data-index="${i}"
+        >
+      </div>
+    `;
+  }
+  
+  html += `</div>`;
+  return html;
+}
+
+// Get legend values from inputs with security validation
+function getLegendValues() {
+  const legendValues = [];
+  const inputs = document.querySelectorAll('.legend-input');
+  
+  inputs.forEach((input, index) => {
+    const rawValue = input.value || '';
+    const sanitizedValue = validateLegendInput(rawValue);
+    legendValues.push(sanitizedValue);
+    
+    // Update input if value was sanitized
+    if (rawValue !== sanitizedValue) {
+      input.value = sanitizedValue;
+    }
+  });
+  
+  return legendValues;
+}
+
+// =========================
 // ZIP Writer Utilities
 // =========================
 // Functions for creating a minimal ZIP archive (uncompressed, no CRC).
@@ -314,7 +423,7 @@ function getSheet1InstructionsXML() {
 // --------------------------------------------------
 
 // Build the calendar sheet using the ExcelBuilder library
-function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawing) {
+function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawing, legendValues = null) {
   const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
@@ -322,6 +431,13 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
   const daysOfWeek = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const startDay = new Date(year, month, 1).getDay();
+
+  // Use provided legend values or defaults
+  const defaultLegendValues = [
+    "Meeting", "Workout", "Appointment", "Holiday", "Personal",
+    "Work", "Travel", "Study", "Event"
+  ];
+  const actualLegendValues = legendValues || defaultLegendValues.slice(0, eventRows);
 
   // Setup columns (A-G calendar, I/J legend)
   const cols = [];
@@ -379,12 +495,12 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
   // Legend header (I1:J1, merged) - back to using cells instead of drawing
   monthRow.addCell(new ExcelCell('I', headerRow, 'Legend', {style: 5}));
   sheet.addMerge(`I${headerRow}:J${headerRow}`);
-
-  // Legend rows (I/J), rows 2..(1+eventRows) - back to using cells instead of drawing
+  // Legend rows (I/J), rows 2..(1+eventRows) - Use custom legend values
   for (let l = 0; l < eventRows; l++) {
     let r = headerRow + 1 + l;
     let row = getRow(r);
-    row.addCell(new ExcelCell('I', r, 'Enter Value Here', {style: 3}));
+    const legendValue = actualLegendValues[l] || `Category ${l + 1}`;
+    row.addCell(new ExcelCell('I', r, legendValue, {style: 3}));
     row.addCell(new ExcelCell('J', r, '', {style: 6 + l}));
   }
 
@@ -548,8 +664,14 @@ function getStylesXML(eventRows) {
 </styleSheet>`;
 }
 
-function getTrackerSheetXML(eventRows) {
+function getTrackerSheetXML(eventRows, legendValues = null) {
   // Build tracker sheet with formulas that count legend values in calendar
+  const defaultLegendValues = [
+    "Meeting", "Workout", "Appointment", "Holiday", "Personal",
+    "Work", "Travel", "Study", "Event"
+  ];
+  const actualLegendValues = legendValues || defaultLegendValues.slice(0, eventRows);
+  
   const palette = [
     "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
     "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
@@ -562,13 +684,15 @@ function getTrackerSheetXML(eventRows) {
   </row>`;
   
   for (let i = 0; i < eventRows; i++) {
-    const rowNum = i + 2;    const legendCellRef = `Calendar!I${i + 2}`; // Simple sheet reference without quotes
-    const countFormula = `COUNTIF(Calendar!A:G,Calendar!I${i + 2})`; // Simple sheet reference
+    const rowNum = i + 2;
+    const legendValue = actualLegendValues[i] || `Category ${i + 1}`;
+    const legendCellRef = `Calendar!I${i + 2}`;
+    const countFormula = `COUNTIF(Calendar!A:G,Calendar!I${i + 2})`;
     
     rows += `<row r="${rowNum}">
       <c r="A${rowNum}" t="str"><f>=${legendCellRef}</f></c>
       <c r="B${rowNum}" t="str"><f>=${countFormula}</f></c>
-      <c r="C${rowNum}" t="inlineStr" s="${6 + i}"><is><t>Automatically counted from Calendar sheet</t></is></c>
+      <c r="C${rowNum}" t="inlineStr" s="${6 + i}"><is><t>Auto-counts "${escapeXml(legendValue)}" from Calendar</t></is></c>
     </row>`;
   }
   
@@ -629,49 +753,75 @@ document.addEventListener("DOMContentLoaded", function() {
         This site offers free, easy-to-use tools for creating custom Excel resources like printable calendars and round robin tournament schedules.<br>
         Choose a tool from the sidebar to get started, customize it to your needs, and download your finished Excel file with just a click.
       </p>
-    `,
-    calendar: `
-      <h2>Custom Excel Calendar Builder</h2>
+    `,    calendar: `
+      <h2>
+        <span class="heading-icon-circle">
+          <img src="images/Calendar Icon.svg" alt="Calendar" style="width:24px;height:24px;">
+        </span>
+        Custom Excel Calendar Builder
+      </h2>
       <form id="calendarForm">
-        <label for="year">Year:</label>
-        <input type="number" id="year" min="1900" max="2100" value="2024" required>
-        <label for="month">Month:</label>
-        <select id="month" required>
-          <option value="0">January</option>
-          <option value="1">February</option>
-          <option value="2">March</option>
-          <option value="3">April</option>
-          <option value="4">May</option>
-          <option value="5">June</option>
-          <option value="6">July</option>
-          <option value="7">August</option>
-          <option value="8">September</option>
-          <option value="9">October</option>
-          <option value="10">November</option>
-          <option value="11">December</option>
-        </select>
-<label for="eventRows">Event Rows per Day:</label>
-<select id="eventRows" required>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-  <option value="6">6</option>
-  <option value="7">7</option>
-  <option value="8">8</option>
-  <option value="9">9</option>
-</select>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="year">📅 Year</label>
+            <input type="number" id="year" min="1900" max="2100" value="2024" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="month">📆 Month</label>
+            <select id="month" required>
+              <option value="0">January</option>
+              <option value="1">February</option>
+              <option value="2">March</option>
+              <option value="3">April</option>
+              <option value="4">May</option>
+              <option value="5">June</option>
+              <option value="6">July</option>
+              <option value="7">August</option>
+              <option value="8">September</option>
+              <option value="9">October</option>
+              <option value="10">November</option>
+              <option value="11">December</option>
+            </select>
+          </div>
 
-<label for="includeTracker" style="margin-left: 12px;">
-  <input type="checkbox" id="includeTracker">
-  Include Tracker Sheet?
-</label>
-        <button type="submit">Generate Calendar</button>
+          <div class="form-group">
+            <label for="eventRows">📝 Event Rows per Day</label>
+            <select id="eventRows" required>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="legendFieldsContainer"></div>
+
+        <div class="form-actions">
+          <div class="checkbox-group">
+            <label for="includeTracker" class="checkbox-label">
+              <input type="checkbox" id="includeTracker">
+              <span class="checkmark"></span>
+              📊 Include Tracker Sheet
+            </label>
+          </div>
+          
+          <button type="submit" class="generate-btn">
+            <img src="images/Gear Icon.svg" alt="Generate" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">
+            Generate Calendar
+          </button>
+        </div>
+        
         <div id="calendarPreview"></div>
-        <button id="downloadTestZipBtn" type="button" style="display:none;">
-          <img src="images/Download Icon.svg" alt="Download Icon" style="width:24px;height:24px;vertical-align:middle;">
-          Download ZIP
+        <button id="downloadTestZipBtn" type="button" class="download-btn" style="display:none;">
+          <img src="images/Download Icon.svg" alt="Download Icon" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;">
+          Download Excel File
         </button>
       </form>
     `,
@@ -689,8 +839,32 @@ document.addEventListener("DOMContentLoaded", function() {
     if (page === "roundrobin") navRoundRobin.classList.add("active");
     mainContent.innerHTML = pages[page];
 
-    // Attach download button handler ONLY after rendering calendar page
+    // Initialize legend fields for calendar page
     if (page === "calendar") {
+      const eventRowsSelect = document.getElementById("eventRows");
+      const container = document.getElementById("legendFieldsContainer");
+      
+      if (eventRowsSelect && container) {
+        // Initialize with default value (3)
+        const defaultEventRows = parseInt(eventRowsSelect.value, 10);
+        container.innerHTML = generateLegendFields(defaultEventRows);
+        
+        // Add validation to initial inputs
+        container.querySelectorAll('.legend-input').forEach(input => {
+          input.addEventListener('input', function() {
+            const sanitized = validateLegendInput(this.value);
+            if (this.value !== sanitized) {
+              this.value = sanitized;
+            }
+          });
+          
+          input.addEventListener('blur', function() {
+            this.value = validateLegendInput(this.value);
+          });
+        });
+      }
+
+      // Attach download button handler ONLY after rendering calendar page
       const downloadBtn = document.getElementById("downloadTestZipBtn");
       if (downloadBtn) {
         downloadBtn.onclick = function() {
@@ -701,23 +875,28 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Please generate a calendar first.");
             return;
           }
-          // Get year, month, eventRows, includeTracker from form
+          
+          // Get values including legend values
           const year = parseInt(document.getElementById("year").value, 10);
           const month = parseInt(document.getElementById("month").value, 10);
           const eventRows = parseInt(document.getElementById("eventRows").value, 10);
-          const includeTracker = document.getElementById("includeTracker").checked;          // Build all Excel XML files
+          const includeTracker = document.getElementById("includeTracker").checked;
+          const currentLegendValues = getLegendValues();
+
+          // Build Excel files with custom legend values
           const files = [
             { name: "[Content_Types].xml", content: getContentTypesXML(includeTracker) },
             { name: "_rels/.rels", content: getRelsXML() },
             { name: "xl/workbook.xml", content: getWorkbookXML(includeTracker) },
             { name: "xl/worksheets/sheet1.xml", content: getSheet1InstructionsXML() },
-            // Calendar sheet without drawing reference
-            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false) },
+            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues) },
             { name: "xl/styles.xml", content: getStylesXML(eventRows) }
           ];
+          
           if (includeTracker) {
-            files.push({ name: "xl/worksheets/sheet3.xml", content: getTrackerSheetXML(eventRows) });
+            files.push({ name: "xl/worksheets/sheet3.xml", content: getTrackerSheetXML(eventRows, currentLegendValues) });
           }
+          
           files.push({ name: "xl/_rels/workbook.xml.rels", content: getWorkbookRelsXML(includeTracker) });
 
           try {
@@ -743,6 +922,31 @@ document.addEventListener("DOMContentLoaded", function() {
   navCalendar.addEventListener("click", () => showPage("calendar"));
   navRoundRobin.addEventListener("click", () => showPage("roundrobin"));
 
+  // Listen for eventRows changes to update legend fields
+  mainContent.addEventListener("change", function(event) {
+    if (event.target && event.target.id === "eventRows") {
+      const eventRows = parseInt(event.target.value, 10);
+      const container = document.getElementById("legendFieldsContainer");
+      if (container) {
+        container.innerHTML = generateLegendFields(eventRows);
+        
+        // Add real-time validation to legend inputs
+        container.querySelectorAll('.legend-input').forEach(input => {
+          input.addEventListener('input', function() {
+            const sanitized = validateLegendInput(this.value);
+            if (this.value !== sanitized) {
+              this.value = sanitized;
+            }
+          });
+          
+          input.addEventListener('blur', function() {
+            this.value = validateLegendInput(this.value);
+          });
+        });
+      }
+    }
+  });
+
   // Listen for calendar form submission (dynamic content!)
   mainContent.addEventListener("submit", function(event) {
     if (event.target && event.target.id === "calendarForm") {
@@ -761,7 +965,8 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("calendarPreview").innerHTML = calendarHTML;
 
       // Show the download ZIP button
-      const downloadBtn = document.getElementById("downloadTestZipBtn");      if (downloadBtn) {
+      const downloadBtn = document.getElementById("downloadTestZipBtn");
+      if (downloadBtn) {
         downloadBtn.style.display = "inline-block";
         // Re-attach the download handler after DOM update
         downloadBtn.onclick = function() {
@@ -772,25 +977,28 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Please generate a calendar first.");
             return;
           }
-          // Get year, month, eventRows, includeTracker from form
+          
+          // Get values including legend values
           const year = parseInt(document.getElementById("year").value, 10);
           const month = parseInt(document.getElementById("month").value, 10);
           const eventRows = parseInt(document.getElementById("eventRows").value, 10);
           const includeTracker = document.getElementById("includeTracker").checked;
+          const currentLegendValues = getLegendValues();
 
-          // Build all Excel XML files
+          // Build all Excel XML files with custom legend values
           const files = [
             { name: "[Content_Types].xml", content: getContentTypesXML(includeTracker) },
             { name: "_rels/.rels", content: getRelsXML() },
             { name: "xl/workbook.xml", content: getWorkbookXML(includeTracker) },
             { name: "xl/worksheets/sheet1.xml", content: getSheet1InstructionsXML() },
-            // Calendar sheet without drawing reference  
-            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false) },
+            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues) },
             { name: "xl/styles.xml", content: getStylesXML(eventRows) }
           ];
+          
           if (includeTracker) {
-            files.push({ name: "xl/worksheets/sheet3.xml", content: getTrackerSheetXML(eventRows) });
+            files.push({ name: "xl/worksheets/sheet3.xml", content: getTrackerSheetXML(eventRows, currentLegendValues) });
           }
+          
           files.push({ name: "xl/_rels/workbook.xml.rels", content: getWorkbookRelsXML(includeTracker) });
 
           try {
@@ -836,7 +1044,12 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let day = 1; day <= daysInMonth; day++) {
       html += `<td>${day}</td>`;
       if ((startDay + day) % 7 === 0 && day !== daysInMonth) html += "</tr><tr>";
-    }    html += "</tr></table>";
+    }
+    
+    html += "</tr></table>";
     return html;
   }
+
+  // Initialize with home page
+  showPage("home");
 });
