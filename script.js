@@ -218,16 +218,24 @@ function validateLegendInput(input) {
 
 // Generate legend input fields based on eventRows selection
 function generateLegendFields(eventRows) {
+  // Fixed palette that matches Excel exactly (with FF prefix for full opacity)
   const palette = [
     "#DC143C", "#228B22", "#1E90FF", "#FFA500", "#800080",
     "#FFFF00", "#00CED1", "#8B4513", "#4682B4"
   ];
   
+  // All available colors for the color picker
+  const allColors = [
+    "#DC143C", "#228B22", "#1E90FF", "#FFA500", "#800080",
+    "#FFFF00", "#00CED1", "#8B4513", "#4682B4", "#FF69B4",
+    "#32CD32", "#FF4500", "#DA70D6", "#00FA9A", "#FFD700",
+    "#87CEEB", "#DDA0DD", "#98FB98", "#F0E68C", "#FF6347"
+  ];
+  
   const defaultNames = [
     "Meeting", "Workout", "Appointment", "Holiday", "Personal",
     "Work", "Travel", "Study", "Event"
-  ];
-    let html = `
+  ];    let html = `
     <div class="legend-fields">
       <h4><img src="images/Gear Icon.svg" alt="Settings" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">Customize Your Legend Values:</h4>
   `;
@@ -238,7 +246,17 @@ function generateLegendFields(eventRows) {
     
     html += `
       <div class="legend-field-group">
-        <div class="legend-color-indicator" style="background-color: ${color};"></div>
+        <div class="legend-color-picker-container">
+          <input 
+            type="color" 
+            class="legend-color-picker" 
+            id="color-${i}" 
+            value="${color}"
+            data-index="${i}"
+            title="Click to change color"
+          >
+          <div class="legend-color-indicator" style="background-color: ${color};" data-index="${i}"></div>
+        </div>
         <input 
           type="text" 
           class="legend-input" 
@@ -254,6 +272,77 @@ function generateLegendFields(eventRows) {
   
   html += `</div>`;
   return html;
+}
+
+// Get legend colors from color pickers
+function getLegendColors() {
+  const legendColors = [];
+  const colorPickers = document.querySelectorAll('.legend-color-picker');
+  
+  console.log('Getting legend colors from', colorPickers.length, 'color pickers');
+  
+  colorPickers.forEach((picker, index) => {
+    const color = picker.value || "#888888";
+    // Convert to Excel format (add FF prefix for opacity)
+    const excelColor = "FF" + color.substring(1).toUpperCase();
+    legendColors.push(excelColor);
+    console.log(`Color picker ${index}: ${color} -> Excel: ${excelColor}`);
+  });
+  
+  console.log('Final legend colors array:', legendColors);
+  return legendColors;
+}
+
+// Validate color selection to prevent duplicates
+function validateColorSelection(selectedIndex, newColor) {
+  const allColorPickers = document.querySelectorAll('.legend-color-picker');
+  const allIndicators = document.querySelectorAll('.legend-color-indicator');
+  
+  // Check if this color is already used by another row
+  for (let i = 0; i < allColorPickers.length; i++) {
+    if (i !== selectedIndex && allColorPickers[i].value === newColor) {
+      // Color already in use, show warning and revert
+      alert(`This color is already used by another legend item. Please choose a different color.`);
+      return false;
+    }
+  }
+  
+  // Update the visual indicator
+  if (allIndicators[selectedIndex]) {
+    allIndicators[selectedIndex].style.backgroundColor = newColor;
+  }
+  
+  return true;
+}
+
+// Handle color picker changes with validation
+function handleColorChange(event) {
+  const picker = event.target;
+  const index = parseInt(picker.dataset.index, 10);
+  const newColor = picker.value;
+  
+  if (!validateColorSelection(index, newColor)) {
+    // Revert to previous color if validation fails
+    const indicator = document.querySelector(`.legend-color-indicator[data-index="${index}"]`);
+    if (indicator) {
+      const previousColor = indicator.style.backgroundColor;
+      // Convert RGB back to hex if needed
+      picker.value = rgbToHex(previousColor) || "#888888";
+    }
+  }
+}
+
+// Convert RGB color to hex format
+function rgbToHex(rgb) {
+  if (rgb.startsWith('#')) return rgb;
+  
+  const result = rgb.match(/\d+/g);
+  if (!result || result.length < 3) return null;
+  
+  return "#" + result.slice(0, 3).map(x => {
+    const hex = parseInt(x).toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  }).join("");
 }
 
 // Get legend values from inputs with security validation
@@ -423,7 +512,7 @@ function getSheet1InstructionsXML() {
 // --------------------------------------------------
 
 // Build the calendar sheet using the ExcelBuilder library
-function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawing, legendValues = null) {
+function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawing, legendValues = null, customColors = null) {
   const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
@@ -494,14 +583,14 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
   
   // Legend header (I1:J1, merged) - back to using cells instead of drawing
   monthRow.addCell(new ExcelCell('I', headerRow, 'Legend', {style: 5}));
-  sheet.addMerge(`I${headerRow}:J${headerRow}`);
-  // Legend rows (I/J), rows 2..(1+eventRows) - Use custom legend values
+  sheet.addMerge(`I${headerRow}:J${headerRow}`);  // Legend rows (I/J), rows 2..(1+eventRows) - Use custom legend values and colors
   for (let l = 0; l < eventRows; l++) {
     let r = headerRow + 1 + l;
     let row = getRow(r);
     const legendValue = actualLegendValues[l] || `Category ${l + 1}`;
     row.addCell(new ExcelCell('I', r, legendValue, {style: 3}));
-    row.addCell(new ExcelCell('J', r, '', {style: 6 + l}));
+    // Use dynamic style index: 10 + l (starts after the base styles)
+    row.addCell(new ExcelCell('J', r, '', {style: 10 + l}));
   }
 
   // Day-of-week header (A2:G2)
@@ -563,11 +652,17 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
   const calendarEventRange = `A${calGridStartRow + 1}:G${lastCalendarRow}`;
   console.log(`Calendar grid setup: calGridStartRow=${calGridStartRow}, lastCalendarRow=${lastCalendarRow}, range=${calendarEventRange}`);
   console.log(`All rows: [${allRows}]`);
-  console.log(`Calendar rows: [${allRows.filter(r => r >= calGridStartRow)}]`);    // Add conditional formatting rules for each legend row
-  const palette = [
-    "FFFF0000", "FF00FF00", "FF0000FF", "FFFFFF00", "FFFF00FF",
-    "FF00FFFF", "FFC0C0C0", "FF800000", "FF008000"
-  ];  for (let l = 0; l < eventRows; l++) {
+  console.log(`Calendar rows: [${allRows.filter(r => r >= calGridStartRow)}]`);  console.log('Building calendar with custom colors:', customColors);
+  console.log('Using legend values:', actualLegendValues);
+  
+  // Add conditional formatting rules for each legend row
+  const defaultPalette = [
+    "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
+    "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
+  ];
+  const palette = customColors || defaultPalette;
+  
+  console.log('Final palette for conditional formatting:', palette);for (let l = 0; l < eventRows; l++) {
     const legendRow = headerRow + 1 + l;
     // Try expression type with UPPER function for case-insensitive matching
     const formula = `UPPER(A${calGridStartRow + 1})=UPPER($I$${legendRow})`;
@@ -600,57 +695,78 @@ function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawi
   return xml;
 }
 
-function getStylesXML(eventRows) {
-  const palette = [
+function getStylesXML(eventRows, customColors = null) {
+  // Use custom colors if provided, otherwise use default palette
+  const defaultPalette = [
     "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
     "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
   ];
+  const palette = customColors || defaultPalette;
+  
+  console.log('getStylesXML called with:');
+  console.log('- eventRows:', eventRows);
+  console.log('- customColors:', customColors);
+  console.log('- final palette:', palette);
 
   const fills = [
     `<fill><patternFill patternType="none"/></fill>`,     // 0: none
     `<fill><patternFill patternType="gray125"/></fill>`,  // 1: gray125
     `<fill><patternFill patternType="solid"><fgColor rgb="FFB6D7A8"/><bgColor indexed="64"/></patternFill></fill>`, // 2: header highlight
     `<fill><patternFill patternType="solid"><fgColor rgb="FFD9EAD3"/><bgColor indexed="64"/></patternFill></fill>`, // 3: legend header fill
-    `<fill><patternFill patternType="solid"><fgColor rgb="FFFFFF9C"/><bgColor indexed="64"/></patternFill></fill>` // 4: light yellow highlight for instructions
+    `<fill><patternFill patternType="solid"><fgColor rgb="FFFFFF9C"/><bgColor indexed="64"/></patternFill></fill>`, // 4: light yellow highlight for instructions
+    `<fill><patternFill patternType="solid"><fgColor rgb="FF4472C4"/><bgColor indexed="64"/></patternFill></fill>`, // 5: blue header for tracker
+    `<fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill>`  // 6: light gray for tracker rows
   ];
-
-  // Add color fills for each legend row
+  // Add color fills for each legend row using the actual custom colors
   for (let i = 0; i < eventRows; i++) {
     fills.push(`<fill><patternFill patternType="solid"><fgColor rgb="${palette[i]}"/><bgColor indexed="64"/></patternFill></fill>`);
+    console.log(`Fill ${i + 7}: color ${palette[i]}`);
   }
 
-  // Fonts: 0 = normal, 1 = bold, 2 = header big bold, 3 = legend header bold, 4 = instruction text
+  // Fonts: 0 = normal, 1 = bold, 2 = header big bold, 3 = legend header bold, 4 = instruction text, 5 = white bold (for tracker header)
   const fonts = [
-    '<font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',
-    '<font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',
-    '<font><b/><sz val="16"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',
-    '<font><b/><sz val="12"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',
-    '<font><sz val="13"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>'
+    '<font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',      // 0: Normal
+    '<font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',  // 1: Bold
+    '<font><b/><sz val="16"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',  // 2: Header big bold
+    '<font><b/><sz val="12"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',  // 3: Legend header bold
+    '<font><sz val="13"/><color theme="1"/><name val="Calibri"/><family val="2"/></font>',      // 4: Instruction text
+    '<font><b/><sz val="12"/><color rgb="FFFFFFFF"/><name val="Calibri"/><family val="2"/></font>' // 5: White bold for tracker header
   ];
 
-  // Borders: 0 = none, 1 = thin box, 2 = bottom only
+  // Borders: 0 = none, 1 = thin box, 2 = bottom only, 3 = thick bottom (for headers), 4 = all borders thick
   const borders = [
     '<border/>',
     '<border><left style="thin"/><right style="thin"/><top style="thin"/><bottom style="thin"/></border>',
-    '<border><bottom style="thin"/></border>'
+    '<border><bottom style="thin"/></border>',
+    '<border><left style="thick"/><right style="thick"/><top style="thick"/><bottom style="thick"/></border>',
+    '<border><left style="medium"/><right style="medium"/><top style="medium"/><bottom style="medium"/></border>'
   ];
 
   // CellXfs: Normal, Bold, Bold+Border, Normal+Border, HeaderBig+Fill+Border, InstructionText+Fill+Border, then colors+border for legend cells
   const cellXfs = [
-    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>', // 0: Normal
-    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>', // 1: Bold
-    '<xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0"/>', // 2: Bold+border
-    '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0"/>', // 3: Normal+border
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>',  // 0: Normal
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>',  // 1: Bold
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0"/>',  // 2: Bold+border
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0"/>',  // 3: Normal+border
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="2" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 4: Header big+fill+border
-    '<xf numFmtId="0" fontId="4" fillId="4" borderId="1" xfId="0"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>' // 5: Instruction text+yellow fill+border
+    '<xf numFmtId="0" fontId="4" fillId="4" borderId="1" xfId="0"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>', // 5: Instruction text+yellow fill+border
+    '<xf numFmtId="0" fontId="0" fillId="${palette.length + 6}" borderId="1" xfId="0"/>', // 6: Legend color fill+border (will be dynamically replaced)
+    '<xf numFmtId="0" fontId="5" fillId="5" borderId="4" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 7: Tracker header (white bold text, blue fill, thick border)
+    '<xf numFmtId="0" fontId="0" fillId="6" borderId="1" xfId="0"><alignment vertical="center" wrapText="1"/></xf>', // 8: Tracker data cells (light gray fill, border, wrap text)
+    '<xf numFmtId="0" fontId="1" fillId="6" borderId="1" xfId="0"><alignment horizontal="center" vertical="center"/></xf>' // 9: Tracker count cells (bold, light gray fill, border, centered)
   ];
-    for (let i = 0; i < eventRows; i++) {
-    cellXfs.push(`<xf numFmtId="0" fontId="0" fillId="${i + 5}" borderId="1" xfId="0"/>`);
-  }  // Add DXF styles for conditional formatting
+  // Add legend color styles - these should match the fill colors exactly
+  for (let i = 0; i < eventRows; i++) {
+    // Style index 10+i uses fill index 7+i which should contain the custom color
+    cellXfs.push(`<xf numFmtId="0" fontId="0" fillId="${i + 7}" borderId="1" xfId="0"/>`);
+    console.log(`CellXfs style ${10 + i}: fillId=${i + 7} (color: ${palette[i]})`);
+  }
+  // Add DXF styles for conditional formatting using the exact same palette
   const dxfs = [];
   for (let i = 0; i < eventRows; i++) {
     // For solid background color in conditional formatting, use bgColor
     dxfs.push(`<dxf><fill><patternFill patternType="solid"><bgColor rgb="${palette[i]}"/></patternFill></fill></dxf>`);
+    console.log(`DXF ${i}: bgColor=${palette[i]}`);
   }
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -672,15 +788,10 @@ function getTrackerSheetXML(eventRows, legendValues = null) {
   ];
   const actualLegendValues = legendValues || defaultLegendValues.slice(0, eventRows);
   
-  const palette = [
-    "FFDC143C", "FF228B22", "FF1E90FF", "FFFFA500", "FF800080",
-    "FFFFFF00", "FF00CED1", "FF8B4513", "FF4682B4"
-  ];
-  
   let rows = `<row r="1">
-    <c r="A1" t="inlineStr" s="1"><is><t>Legend Value</t></is></c>
-    <c r="B1" t="inlineStr" s="1"><is><t>Count</t></is></c>
-    <c r="C1" t="inlineStr" s="1"><is><t>Description</t></is></c>
+    <c r="A1" t="inlineStr" s="7"><is><t>Legend Value</t></is></c>
+    <c r="B1" t="inlineStr" s="7"><is><t>Count</t></is></c>
+    <c r="C1" t="inlineStr" s="7"><is><t>Description</t></is></c>
   </row>`;
   
   for (let i = 0; i < eventRows; i++) {
@@ -688,11 +799,12 @@ function getTrackerSheetXML(eventRows, legendValues = null) {
     const legendValue = actualLegendValues[i] || `Category ${i + 1}`;
     const legendCellRef = `Calendar!I${i + 2}`;
     const countFormula = `COUNTIF(Calendar!A:G,Calendar!I${i + 2})`;
+    const descriptionText = `Auto-counts "${escapeXml(legendValue)}" entries from Calendar sheet`;
     
     rows += `<row r="${rowNum}">
-      <c r="A${rowNum}" t="str"><f>=${legendCellRef}</f></c>
-      <c r="B${rowNum}" t="str"><f>=${countFormula}</f></c>
-      <c r="C${rowNum}" t="inlineStr" s="${6 + i}"><is><t>Auto-counts "${escapeXml(legendValue)}" from Calendar</t></is></c>
+      <c r="A${rowNum}" t="str" s="8"><f>=${legendCellRef}</f></c>
+      <c r="B${rowNum}" t="str" s="9"><f>=${countFormula}</f></c>
+      <c r="C${rowNum}" t="inlineStr" s="8"><is><t>${descriptionText}</t></is></c>
     </row>`;
   }
   
@@ -700,8 +812,8 @@ function getTrackerSheetXML(eventRows, legendValues = null) {
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
   <cols>
     <col min="1" max="1" width="20"/>
-    <col min="2" max="2" width="8"/>
-    <col min="3" max="3" width="35"/>
+    <col min="2" max="2" width="10"/>
+    <col min="3" max="3" width="50" bestFit="1"/>
   </cols>
   <sheetData>${rows}</sheetData>
 </worksheet>`;
@@ -848,8 +960,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Initialize with default value (3)
         const defaultEventRows = parseInt(eventRowsSelect.value, 10);
         container.innerHTML = generateLegendFields(defaultEventRows);
-        
-        // Add validation to initial inputs
+          // Add validation to initial inputs
         container.querySelectorAll('.legend-input').forEach(input => {
           input.addEventListener('input', function() {
             const sanitized = validateLegendInput(this.value);
@@ -861,6 +972,11 @@ document.addEventListener("DOMContentLoaded", function() {
           input.addEventListener('blur', function() {
             this.value = validateLegendInput(this.value);
           });
+        });
+        
+        // Add color picker change handlers
+        container.querySelectorAll('.legend-color-picker').forEach(picker => {
+          picker.addEventListener('change', handleColorChange);
         });
       }
 
@@ -874,23 +990,26 @@ document.addEventListener("DOMContentLoaded", function() {
           if (!calendarPreview || !calendarPreview.innerHTML.trim()) {
             alert("Please generate a calendar first.");
             return;
-          }
-          
-          // Get values including legend values
+          }          // Get values including legend values and colors
           const year = parseInt(document.getElementById("year").value, 10);
           const month = parseInt(document.getElementById("month").value, 10);
           const eventRows = parseInt(document.getElementById("eventRows").value, 10);
           const includeTracker = document.getElementById("includeTracker").checked;
           const currentLegendValues = getLegendValues();
+          const currentLegendColors = getLegendColors();
 
-          // Build Excel files with custom legend values
+          console.log('About to generate Excel with:');
+          console.log('- Legend Values:', currentLegendValues);
+          console.log('- Legend Colors:', currentLegendColors);
+
+          // Build Excel files with custom legend values and colors
           const files = [
             { name: "[Content_Types].xml", content: getContentTypesXML(includeTracker) },
             { name: "_rels/.rels", content: getRelsXML() },
             { name: "xl/workbook.xml", content: getWorkbookXML(includeTracker) },
             { name: "xl/worksheets/sheet1.xml", content: getSheet1InstructionsXML() },
-            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues) },
-            { name: "xl/styles.xml", content: getStylesXML(eventRows) }
+            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues, currentLegendColors) },
+            { name: "xl/styles.xml", content: getStylesXML(eventRows, currentLegendColors) }
           ];
           
           if (includeTracker) {
@@ -929,8 +1048,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const container = document.getElementById("legendFieldsContainer");
       if (container) {
         container.innerHTML = generateLegendFields(eventRows);
-        
-        // Add real-time validation to legend inputs
+          // Add real-time validation to legend inputs
         container.querySelectorAll('.legend-input').forEach(input => {
           input.addEventListener('input', function() {
             const sanitized = validateLegendInput(this.value);
@@ -942,6 +1060,11 @@ document.addEventListener("DOMContentLoaded", function() {
           input.addEventListener('blur', function() {
             this.value = validateLegendInput(this.value);
           });
+        });
+        
+        // Add color picker change handlers
+        container.querySelectorAll('.legend-color-picker').forEach(picker => {
+          picker.addEventListener('change', handleColorChange);
         });
       }
     }
@@ -977,22 +1100,22 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Please generate a calendar first.");
             return;
           }
-          
-          // Get values including legend values
+            // Get values including legend values and colors
           const year = parseInt(document.getElementById("year").value, 10);
           const month = parseInt(document.getElementById("month").value, 10);
           const eventRows = parseInt(document.getElementById("eventRows").value, 10);
           const includeTracker = document.getElementById("includeTracker").checked;
           const currentLegendValues = getLegendValues();
+          const currentLegendColors = getLegendColors();
 
-          // Build all Excel XML files with custom legend values
+          // Build all Excel XML files with custom legend values and colors
           const files = [
             { name: "[Content_Types].xml", content: getContentTypesXML(includeTracker) },
             { name: "_rels/.rels", content: getRelsXML() },
             { name: "xl/workbook.xml", content: getWorkbookXML(includeTracker) },
             { name: "xl/worksheets/sheet1.xml", content: getSheet1InstructionsXML() },
-            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues) },
-            { name: "xl/styles.xml", content: getStylesXML(eventRows) }
+            { name: "xl/worksheets/sheet2.xml", content: buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, currentLegendValues, currentLegendColors) },
+            { name: "xl/styles.xml", content: getStylesXML(eventRows, currentLegendColors) }
           ];
           
           if (includeTracker) {
