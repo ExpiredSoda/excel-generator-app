@@ -1,0 +1,527 @@
+/* =========================
+   Global Styles & Body
+   ========================= */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: #202020;
+}
+
+/* =========================
+   Banner/Header
+   ========================= */
+.banner {
+  width: 100%;
+  height: 500px;
+  background: url('images/Excel Banner.svg') center center/cover no-repeat, #20b388;
+  border-bottom: 3px solid #222;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+.banner-image {
+  width: 100%;
+  max-width: 1600px;
+  height: auto;
+  display: block;
+}
+
+/* =========================
+   Layout: Sidebar & Content
+   ========================= */
+.layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 80vh;
+}
+
+/* =========================
+   Sidebar Navigation
+   ========================= */
+.sidebar {
+  background: #f4f8f6;
+  min-width: 220px;
+  max-width: 260px;
+  padding: 20px 0 0 0;
+  border-right: 2px solid #d1e7dd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 90%;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.nav-item.active,
+.nav-item:hover {
+  background: #20b388;
+  color: #fff;
+}
+.nav-item img {
+  width: 32px;
+  height: 32px;
+}
+
+/* =========================
+   Main Content Area
+   ========================= */
+.main-content {
+  flex: 1;
+  padding: 40px 48px;
+  background: #fff;
+  min-height: 600px;
+}
+
+/* =========================
+   Download Button (Calendar)
+   ========================= */
+#downloadTestZipBtn {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================
+   Responsive Design
+   ========================= */
+@media (max-width: 800px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    flex-direction: row;
+    min-width: 100vw;
+    max-width: 100vw;
+    padding: 8px;
+    border-right: none;
+    border-bottom: 2px solid #d1e7dd;
+  }
+  .main-content {
+    padding: 24px 8px;
+  }
+}
+
+/* =========================
+   Legend Input Fields
+   ========================= */
+.legend-fields {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.legend-field-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+  transition: all 0.3s ease;
+}
+
+.legend-field-group:hover {
+  background: #f0f7ff;
+  border-color: #4CAF50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+}
+
+.legend-color-picker-container {
+  position: relative;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.legend-color-picker {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.legend-color-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.legend-color-indicator:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.legend-color-indicator:active {
+  transform: scale(0.95);
+}
+
+.legend-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.legend-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
+}
+
+.legend-input:valid {
+  border-color: #28a745;
+}
+
+.legend-input:invalid {
+  border-color: #dc3545;
+}
+
+.legend-fields h4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* =========================
+   Modern Form Styling
+   ========================= */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0;
+  padding: 20px 0;
+  border-top: 1px solid #eee;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  color: #2c3e50;
+  position: relative;
+  padding-left: 35px;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label:hover input ~ .checkmark {
+  border-color: #4CAF50;
+  background-color: #f8fff8;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-label .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.generate-btn,
+.download-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.generate-btn:hover,
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049, #4CAF50);
+}
+
+.generate-btn:active,
+.download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #FFA500, #FF7F50); /* Orange to Coral */
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+  margin-top: 20px;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #FF7F50, #FFA500);
+  box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
+}
+
+/* =========================
+   Heading Icon Circle
+   ========================= */
+
+.heading-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+  vertical-align: middle;
+}
+
+.heading-icon-circle img {
+  filter: brightness(0) invert(1); /* Makes the icon white */
+}
+
+/* =========================
+   Calendar Preview Styling
+   ========================= */
+.calendar-preview-section {
+  width: 100%;
+  max-width: 700px;
+  margin: 48px auto 0 auto;
+  background: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(32,179,136,0.08);
+  padding: 32px 24px 24px 24px;
+  border: 1.5px solid #e1e8ed;
+}
+.calendar-preview-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #20b388;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(32,179,136,0.07);
+}
+.calendar-table th, .calendar-table td {
+  border: 1px solid #e1e8ed;
+  text-align: center;
+  padding: 8px 0;
+  min-width: 36px;
+  font-size: 1rem;
+}
+.calendar-table th {
+  background: #20b388;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.calendar-date {
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px;
+}
+.calendar-event-row {
+  height: 1.5em;
+  background: #f4f8f6;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+.calendar-legend {
+  margin-top: 18px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.calendar-legend-item {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 16px;
+  color: #fff;
+  font-weight: 600;
+  margin-right: 8px;
+  font-size: 0.98rem;
+  box-shadow: 0 1px 4px rgba(32,179,136,0.10);
+}
+
+/* =========================
+   Modern Toast Notification
+   ========================= */
+.calendar-toast {
+  visibility: hidden;
+  min-width: 320px;
+  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 18px 32px;
+  position: fixed;
+  left: 50%;
+  bottom: 48px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  font-size: 1.08rem;
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(32,179,136,0.18);
+  opacity: 0;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+.calendar-toast.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .generate-btn,
+  .download-btn {
+    justify-content: center;
+  }
+  
+  .legend-field-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .legend-color-picker-container {
+    align-self: flex-start;
+    margin-right: 0;
+  }
+}

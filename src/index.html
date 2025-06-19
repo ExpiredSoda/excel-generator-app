@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Free Excel Generators</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="banner"></header>
+  <div class="layout">    <nav class="sidebar">
+      <ul>
+        <li class="nav-item active" id="nav-home" style="cursor: pointer;"><img src="images/Home Icon.svg" alt="Home">Home</li>
+        <li class="nav-item" id="nav-calendar" style="cursor: pointer;"><img src="images/Calendar Pencil Icon.svg" alt="Calendar">Calendar Builder</li>
+        <li class="nav-item" id="nav-attendance" style="cursor: pointer;"><img src="images/Checklist Icon.svg" alt="Attendance">Attendance Tracker</li>
+        <li class="nav-item" id="nav-meeting" style="cursor: pointer;"><img src="images/Circle Dots Icon.svg" alt="Meeting">Meeting Tracker</li>
+      </ul>
+    </nav>
+    <main class="main-content"></main>
+  </div>
+  <template id="calendarPageTemplate">
+    <h2><span class="heading-icon-circle"><img src="images/Calendar Pencil Icon.svg" alt="Calendar" style="width:28px;height:28px;"></span>Smart Calendar Builder</h2>
+    <form id="calendarForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="yearInput"><img src="images/Year Calendar Icon.svg" alt="Year" style="width:20px;vertical-align:middle;margin-right:8px;">Year</label>
+          <input type="number" id="yearInput" min="1900" max="2100" value="2024" required>
+        </div>
+        <div class="form-group">
+          <label for="monthSelect"><img src="images/Month Calendar Icon.svg" alt="Month" style="width:20px;vertical-align:middle;margin-right:8px;">Month</label>
+          <select id="monthSelect">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="eventRowsSelect"><img src="images/Rows Icon.svg" alt="Rows" style="width:20px;vertical-align:middle;margin-right:8px;">Event Rows per Day</label>
+          <select id="eventRowsSelect">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="checkbox-label"><input type="checkbox" id="includeTracker"><span class="checkmark"></span><img src="images/Bars Icon.svg" alt="Tracker" style="width:20px;vertical-align:middle;margin-right:8px;margin-left:8px;">Include Tracker Sheet</label>
+        </div>
+      </div>
+      <div id="legendFieldsContainer"></div>
+      <div class="form-actions">
+        <button type="submit" class="generate-btn"><img src="images/Calendar Pencil Icon.svg" alt="Generate" style="width:22px;margin-right:8px;">Generate Calendar</button>
+        <button type="button" id="downloadBtn" class="download-btn" style="display:none;"><img src="images/Download Icon.svg" alt="Download" style="width:22px;margin-right:8px;">Download Excel</button>
+      </div>
+      <div id="output"></div>
+    </form>
+  </template>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

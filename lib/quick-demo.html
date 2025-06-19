@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Library Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        button { padding: 15px 30px; font-size: 16px; margin: 10px; cursor: pointer; }
+        .demo-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>📚 Excel Generator Library - Quick Demo</h1>
+      <div class="demo-section">
+        <h2>🗓️ Generate Calendar</h2>
+        <p>Choose your options:</p>
+        <label>
+            <input type="checkbox" id="includeTracker"> Include Tracker Sheet
+        </label><br><br>
+        <button onclick="generateCalendar()">Generate & Download Calendar</button>
+        <div id="calendar-status"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>📋 Code Example</h2>
+        <p>This is how developers would use your library:</p>
+        <pre><code>import { 
+  buildCalendarSheetWithExcelBuilder,
+  getStylesXML,
+  createZip 
+} from './lib/index.js';
+
+// Generate calendar
+const calendarXML = buildCalendarSheetWithExcelBuilder(
+  2024, 0, 3, false,
+  ['Meeting', 'Holiday', 'Personal'],
+  ['FFDC143C', 'FF228B22', 'FF1E90FF']
+);
+
+// Create Excel file
+const files = [/* ... */];
+const zipBytes = createZip(files);
+// Download...</code></pre>
+    </div>
+
+    <script type="module">        window.generateCalendar = async function() {
+            const status = document.getElementById('calendar-status');
+            const includeTracker = document.getElementById('includeTracker').checked;
+            
+            status.innerHTML = `⏳ Generating calendar${includeTracker ? ' with tracker' : ''}...`;
+            
+            try {
+                // Import library functions
+                const { 
+                    buildCalendarSheetWithExcelBuilder,
+                    getStylesXML,
+                    getContentTypesXML,
+                    getWorkbookXML,
+                    getRelsXML,
+                    getWorkbookRelsXML,
+                    createZip 
+                } = await import('./index.js');
+                
+                // Generate calendar with custom settings
+                const year = 2024;
+                const month = new Date().getMonth(); // Current month
+                const eventRows = 3;
+                const legendValues = ['Meeting', 'Workout', 'Holiday'];
+                const customColors = ['FFDC143C', 'FF228B22', 'FF1E90FF'];
+                
+                // Generate all Excel components
+                const calendarXML = buildCalendarSheetWithExcelBuilder(
+                    year, month, eventRows, false, legendValues, customColors
+                );
+                
+                const stylesXML = getStylesXML(eventRows, customColors);
+                const contentTypesXML = getContentTypesXML(false);
+                const workbookXML = getWorkbookXML(false);
+                const relsXML = getRelsXML();
+                const workbookRelsXML = getWorkbookRelsXML(false);
+                  // Create complete Excel file structure - Fix the mismatch
+                const files = [
+                    { name: '[Content_Types].xml', content: contentTypesXML },
+                    { name: '_rels/.rels', content: relsXML },
+                    { name: 'xl/workbook.xml', content: workbookXML },
+                    { name: 'xl/worksheets/sheet1.xml', content: calendarXML }, // This should be the calendar
+                    { name: 'xl/styles.xml', content: stylesXML },
+                    { name: 'xl/_rels/workbook.xml.rels', content: workbookRelsXML }
+                ];
+                
+                // Note: Remove sheet2 reference since we're not generating a second sheet
+                
+                // Generate ZIP file
+                const zipBytes = createZip(files);
+                
+                // Create download
+                const blob = new Blob([zipBytes], { 
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'demo-calendar.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                status.innerHTML = `
+                    ✅ Success! Calendar generated and downloaded.<br>
+                    📊 File size: ${zipBytes.length} bytes<br>
+                    🗓️ Month: ${new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                `;
+                
+            } catch (error) {
+                status.innerHTML = `❌ Error: ${error.message}`;
+                console.error('Library demo error:', error);
+            }
+        };
+    </script>
+</body>
+</html>
