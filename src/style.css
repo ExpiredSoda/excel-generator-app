@@ -386,15 +386,17 @@ body {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+  background: #20b38781;
   border-radius: 50%;
   margin-right: 12px;
-  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
   vertical-align: middle;
+  transition: all 0.3s ease;
 }
 
-.heading-icon-circle img {
-  filter: brightness(0) invert(1); /* Makes the icon white */
+.heading-icon-circle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(76, 175, 80, 0.5);
 }
 
 /* =========================
