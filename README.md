@@ -1,124 +1,244 @@
-# Excel Generator Project 📊
+# Excel Generator App
 
-A comprehensive Excel file generation solution that creates smart calendars with conditional formatting, custom styling, and formula support. Built with pure JavaScript and zero dependencies.
+A modern, modular web application for generating customizable Excel worksheets. Built with vanilla JavaScript and a domain-driven architecture, this application provides powerful Excel generation capabilities with an intuitive user interface.
 
-## 🎯 Quick Start
+## 🚀 Features
 
-**👉 Want to use the app?** Open `/src/index.html` in your browser!  
-**👉 Want to develop with it?** Check out the `/lib` folder for reusable components!  
-**👉 Want to see the evolution?** Compare `/archive` with `/src` to see the refactoring benefits!  
+### 📅 Smart Calendar Builder
+- **Custom Monthly Calendars**: Generate Excel calendars for any year and month
+- **Event Rows**: Configurable 1-9 event rows per day for scheduling
+- **Optional Tracker Sheet**: Include a companion tracking worksheet
+- **Custom Legend Colors**: Define color-coded categories with custom values
+- **Professional Formatting**: Automatic sizing, styling, and conditional formatting
 
-## 📁 Repository Structure
+### 👥 Employee Shift Tracker
+- **Employee Management**: Add employees with details (name, ID, email, title, phone)
+- **Shift Scheduling**: Define custom shift times with break periods
+- **Quick Templates**: Pre-defined shift presets (1st, 2nd, 3rd shift)
+- **Color Coding**: Visual employee identification with custom colors
+- **Time Tracking**: Weekly schedule grid with total hours calculation
+- **Reference Sheet**: Comprehensive employee directory
 
-This repository contains **three complete versions** of the Excel Generator:
+### 🛠️ Meeting Tracker *(Coming Soon)*
+- Meeting scheduling and tracking functionality
+
+## 🏗️ Architecture
+
+The application follows a clean, modular architecture with clear separation of concerns:
 
 ```
-📦 excel-generator-app/
-├── 🚀 src/                     # CURRENT VERSION - Use this!
-│   ├── index.html              # 👈 Main application - Open this file!
-│   ├── main.js                 # Modular architecture
-│   ├── style.css               # Modern UI
-│   ├── core/                   # Excel building classes
-│   ├── generators/             # XML generators
-│   ├── ui/                     # User interface modules
-│   ├── utils/                  # Utility functions
-│   └── images/                 # UI assets
+src/
+├── web/                    # User Interface Layer
+│   ├── ui/                 # UI Components & Navigation
+│   │   ├── navigation.js   # Sidebar navigation and page routing
+│   │   ├── calendarBuilder.js  # Calendar form handling
+│   │   └── attendanceTracker.js # Employee management UI
+│   └── utils/              # UI-specific utilities
+│       ├── previewCalendar.js  # Calendar preview generation
+│       └── previewEmployee.js  # Employee card previews
 │
-├── 🗄️ archive/                 # Original monolithic version (preserved)
-│   ├── script.js               # Single 800+ line file
-│   ├── index.html              # Original HTML
-│   └── style.css               # Original styles
+├── excel/                  # Excel Generation Layer
+│   ├── core/               # Core Excel functionality
+│   │   ├── excelBuilder.js # Main Excel workbook builder
+│   │   ├── excelSheet.js   # Worksheet management
+│   │   ├── excelCell.js    # Cell creation and formatting
+│   │   ├── excelRow.js     # Row management
+│   │   ├── conditionalFormatting.js # Conditional formatting rules
+│   │   ├── xmlUtils.js     # XML utility functions
+│   │   └── index.js        # Core module exports
+│   ├── generators/         # Specialized Excel generators
+│   │   ├── calendar/       # Calendar-specific generation
+│   │   └── attendance/     # Attendance tracker generation
+│   └── utils/              # Excel utilities
+│       └── zipUtils.js     # ZIP file creation for Excel format
 │
-├── 📚 lib/                     # Reusable library for developers
-│   ├── index.js                # Clean API for integration
-│   ├── core/                   # Core classes
-│   ├── generators/             # Generator modules
-│   └── utils/                  # Utility functions
+├── presentation/           # Universal Styling & Formatting
+│   ├── styles/             # Style definitions
+│   │   ├── fonts.js        # Font configurations
+│   │   ├── colors.js       # Color palette
+│   │   ├── fills.js        # Cell fill patterns
+│   │   ├── borders.js      # Border styles
+│   │   ├── styleIds.js     # Style ID management
+│   │   └── stylesXml.js    # XML style generation
+│   ├── formatting/         # Cell formatting
+│   │   ├── cellFormats.js  # Cell format definitions
+│   │   └── dxfFormats.js   # Differential formatting
+│   ├── sizing/             # Layout and sizing
+│   │   └── excelSizing.js  # Column widths and row heights
+│   └── index.js            # Presentation layer exports
 │
-└── 📖 docs/                    # Project documentation
-    ├── DEVELOPMENT.md          # How to add features
-    └── DEPLOYMENT.md           # How to deploy
+├── shared/                 # Cross-domain utilities
+│   └── utils/
+│       ├── validation.js   # Input validation
+│       └── sanitize.js     # Data sanitization
+│
+└── images/                 # UI assets and icons
 ```
 
-## ✨ Features (All Versions)
+## 🎨 Key Design Principles
 
-- 🗓️ **Smart Calendar Generation** with conditional formatting
-- 🎨 **Visual Color Picker** with real-time preview  
-- 📋 **Custom Legend Values** with automatic highlighting
-- 📊 **Tracker Integration** with Excel formulas
-- 📱 **Cross-Platform** - Works in Excel, Google Sheets, and other apps
-- 🚫 **Zero Dependencies** - Pure JavaScript implementation
+### Universal Style System
+- **Centralized Styling**: All Excel styles managed through `src/presentation/`
+- **Style ID Management**: Named constants instead of magic numbers
+- **Reusable Components**: Modular style definitions shared across generators
+- **Consistent Formatting**: Uniform appearance across all generated Excel files
 
-## 🚀 Which Version Should I Use?
+### Domain-Driven Design
+- **Clear Boundaries**: Separate domains for UI, Excel generation, presentation, and shared utilities
+- **Dependency Direction**: Clean dependencies flowing inward toward core functionality
+- **Modular Components**: Each module has a single responsibility
 
-### 👥 **For End Users**
-**Use `/src/index.html`** - The current, feature-complete application
-- ✅ Latest features and bug fixes
-- ✅ Modern modular architecture  
-- ✅ Easy to customize and extend
-- ✅ Actively maintained
+### Security & Validation
+- **Input Sanitization**: All user inputs are sanitized before processing
+- **XSS Protection**: Protection against script injection in Excel content
+- **Safe XML Generation**: Proper XML escaping for all user-generated content
 
-### 👨‍💻 **For Developers** 
-**Use `/lib/`** - Clean, reusable components
+## 🚀 Quick Start
+
+### Prerequisites
+- Modern web browser with ES6 module support
+- Local web server (for CORS compliance)
+
+### Running the Application
+
+#### Option 1: Python Server
+```bash
+# Navigate to project directory
+cd excel-generator-app
+
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+
+# Open http://localhost:8000/src/
+```
+
+#### Option 2: Node.js Server
+```bash
+# Install a simple HTTP server
+npm install -g http-server
+
+# Navigate to project directory
+cd excel-generator-app
+
+# Start server
+http-server
+
+# Open http://localhost:8080/src/
+```
+
+#### Option 3: VS Code Live Server
+1. Install the "Live Server" extension in VS Code
+2. Right-click on `src/index.html`
+3. Select "Open with Live Server"
+
+## 📖 Usage Guide
+
+### Creating a Calendar
+1. Click **Calendar Builder** in the sidebar
+2. Select year and month
+3. Choose number of event rows per day (1-9)
+4. Optionally enable **Include Tracker Sheet**
+5. Add custom legend colors and values if desired
+6. Click **Generate Calendar**
+7. Download the generated Excel file
+
+### Managing Employee Shifts
+1. Click **Attendance Tracker** in the sidebar
+2. Fill in employee information (name and title required)
+3. Set shift times or use quick presets
+4. Choose a color code for the employee
+5. Click **Add Employee**
+6. Repeat for all employees
+7. Click **Generate Tracker** to create Excel file
+
+## 🛠️ Development
+
+### Adding New Features
+1. **UI Components**: Add to `src/web/ui/`
+2. **Excel Generators**: Create in `src/excel/generators/[feature]/`
+3. **Shared Utilities**: Add to `src/shared/utils/`
+4. **Styling**: Extend `src/presentation/styles/`
+
+### Style System Usage
 ```javascript
-import { ExcelBuilder, CalendarGenerator } from './lib/index.js';
+// Import universal styles
+import { STYLE_IDS, getCustomStyleId } from '../../../presentation/index.js';
 
-const calendar = new CalendarGenerator({
-  year: 2024,
-  month: 0,
-  legendValues: ['Meeting', 'Holiday'],
-  legendColors: ['FFDC143C', 'FF228B22']
-});
+// Use predefined styles
+const headerStyle = STYLE_IDS.HEADER;
+
+// Create custom styles
+const customStyle = getCustomStyleId('myCustomStyle', customConfig);
 ```
 
-### 📚 **For Learning/Reference**
-**Check `/archive/`** - Original monolithic version
-- See the evolution from monolithic to modular
-- Understand refactoring benefits
-- Historical reference for the project
+### Adding New Excel Generators
+1. Create generator directory in `src/excel/generators/[name]/`
+2. Implement main sheet builder
+3. Add supporting XML generators (styles, workbook, content types)
+4. Export functions and integrate with UI
+5. Use universal presentation system for styling
 
-## 🔄 Project Evolution
+## 📁 File Structure Details
 
-```
-🗄️ Archive (v1.0)          🚀 Current (v2.0)
-├── script.js (800+ lines)  ├── main.js (clean entry point)
-├── index.html              ├── core/ (Excel classes)
-└── style.css               ├── generators/ (XML creation)
-                            ├── ui/ (interface logic)
-                            └── utils/ (helper functions)
+### Core Excel Components
+- **ExcelBuilder**: Main workbook construction and ZIP generation
+- **ExcelSheet**: Worksheet management with automatic sizing
+- **ExcelCell**: Individual cell creation with formatting
+- **ExcelRow**: Row management with height optimization
+- **ConditionalFormatting**: Dynamic formatting rules
 
-❌ Hard to maintain         ✅ Easy to extend
-❌ Difficult to test        ✅ Modular testing  
-❌ Code duplication         ✅ Clean separation
-❌ Merge conflicts          ✅ Parallel development
-```
+### Presentation Layer
+- **Fonts**: Typography definitions (Calibri, Arial, etc.)
+- **Colors**: Comprehensive color palette for themes
+- **Fills**: Background patterns and gradients
+- **Borders**: Border styles and thickness options
+- **Sizing**: Column widths and row heights for different content types
 
-## 🛠️ Development & Deployment
+### Security Features
+- **Sanitization**: Removes potentially harmful characters
+- **Validation**: Checks input patterns and formats
+- **XML Escaping**: Prevents XML injection attacks
 
-- **Development**: See `/docs/DEVELOPMENT.md` for adding features
-- **Deployment**: See `/docs/DEPLOYMENT.md` for hosting options
-- **Library Usage**: See `/lib/README.md` for integration guide
+## 🔧 Technical Stack
 
-## 🧪 Testing
+- **Frontend**: Vanilla JavaScript (ES6 modules)
+- **Styling**: Pure CSS with BEM methodology
+- **Excel Format**: Office Open XML (.xlsx)
+- **Architecture**: Domain-driven design with modular components
+- **Security**: Input sanitization and validation
 
-Each folder contains a complete, working version:
-- **Archive**: `open archive/index.html` (works with script.js)
-- **Current**: `open src/index.html` (works with modular files)
-- **Library**: See examples in `/lib/examples/`
+## 🎯 Browser Support
 
-## 📈 Future Roadmap
+- Chrome 61+
+- Firefox 60+
+- Safari 11+
+- Edge 16+
 
-- [ ] Additional calendar layouts (weekly, yearly)
-- [ ] More tracker sheet options  
-- [ ] Template system for common use cases
-- [ ] Export to other formats (PDF, CSV)
-- [ ] Advanced styling options
-- [ ] Recurring event support
+## 📝 License
 
-## 📄 License
+This project is open source and available under the [MIT License](LICENSE).
 
-MIT License - See individual folders for specific details.
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow the existing architecture patterns
+4. Add comprehensive documentation
+5. Test your changes thoroughly
+6. Submit a pull request
+
+## 🔮 Roadmap
+
+- **Meeting Tracker**: Complete meeting scheduling functionality
+- **Template System**: Save and reuse custom templates
+- **Export Formats**: Support for additional file formats
+- **Advanced Formatting**: More styling and layout options
+- **Cloud Integration**: Save/load from cloud storage
+- **API Development**: RESTful API for programmatic access
 
 ---
 
-**🎯 TL;DR**: Open `/src/index.html` to use the app, check `/lib/` to integrate it, and peek at `/archive/` to see where we started!
+Built with ❤️ for creating professional Excel worksheets with ease.

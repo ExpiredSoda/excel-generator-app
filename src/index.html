@@ -7,15 +7,36 @@
 </head>
 <body>
   <header class="banner"></header>
-  <div class="layout">    <nav class="sidebar">
+  <div class="layout">
+    <nav class="sidebar">
       <ul>
         <li class="nav-item active" id="nav-home" style="cursor: pointer;"><img src="images/Home Icon.svg" alt="Home">Home</li>
         <li class="nav-item" id="nav-calendar" style="cursor: pointer;"><img src="images/Calendar Pencil Icon.svg" alt="Calendar">Calendar Builder</li>
         <li class="nav-item" id="nav-attendance" style="cursor: pointer;"><img src="images/Checklist Icon.svg" alt="Attendance">Attendance Tracker</li>
         <li class="nav-item" id="nav-meeting" style="cursor: pointer;"><img src="images/Circle Dots Icon.svg" alt="Meeting">Meeting Tracker</li>
+        <li class="nav-item" id="nav-contact" style="cursor: pointer;"><img src="images/Lightbulb Icon.svg" alt="Contact">Contact</li>
       </ul>
     </nav>
-    <main class="main-content"></main>
+    <main class="main-content">
+      <section class="homepage-intro homepage-intro-styled">
+        <h1 class="homepage-title">Welcome to Free Excel Generators</h1>
+        <p class="homepage-intro-text">
+          I'm just a real human—no AI startup, no SaaS company, no hidden subscriptions. I built this site as a personal project to sharpen my skills in JavaScript, HTML, and Excel, while also creating tools that actually help people. I've always been frustrated by websites that require logins just to download a spreadsheet, or by AI tools that either cost too much, have a steep learning curve, or don't quite do what you need. This project is my way of pushing back on all that. It's made for the folks stuck in admin roles or team support positions who never had time to conquer Excel but still want clean, functional spreadsheets without the headache. Maybe you just hate tools altogether. Maybe you want to impress your boss with a polished calendar or tracker and wink wink pretend you built it—go for it, I won't stop you. Everything here is free, built to work entirely in your browser, and focused on being genuinely useful. If it helps you out, maybe consider buying me a coffee—or better yet, shoot me an email telling me how much you love the site. Who knows, you might just show up on the future testimonial wall. Thanks for being here
+        </p>
+        <p class="homepage-intro-contact">
+          If you want something custom or hand-tailored to your workflow, I do take custom orders—just send me an email. We can set up a time to talk it through, or hash it out the old-fashioned way: through the world's fastest postal service—email. Got a suggestion? Want to send me praise, hate mail, or just test if I actually read my inbox? Maybe you're a scam bot who wandered in by accident. Either way, I'm all ears. Shoot me a message—I read everything.
+        </p>
+      </section>
+      <section class="homepage-updates homepage-updates-styled">
+        <h2 class="homepage-updates-title">Updates</h2>
+        <ul class="homepage-updates-list">
+          <li>June 2025: Homepage intro and updates section added for more transparency and warmth.</li>
+          <li>All tools remain 100% free and privacy-friendly—no logins, no tracking.</li>
+          <li>More Excel templates and features coming soon. Got a request? Email me!</li>
+        </ul>
+      </section>
+      <!-- ...existing code for dynamic content/templates... -->
+    </main>
   </div>
   <template id="calendarPageTemplate">
     <h2><span class="heading-icon-circle"><img src="images/Calendar Pencil Icon.svg" alt="Calendar" style="width:28px;height:28px;"></span>Smart Calendar Builder</h2>
@@ -63,13 +84,134 @@
         </div>
       </div>
       <div id="legendFieldsContainer"></div>
-      <div class="form-actions">
-        <button type="submit" class="generate-btn"><img src="images/Calendar Pencil Icon.svg" alt="Generate" style="width:22px;margin-right:8px;">Generate Calendar</button>
-        <button type="button" id="downloadBtn" class="download-btn" style="display:none;"><img src="images/Download Icon.svg" alt="Download" style="width:22px;margin-right:8px;">Download Excel</button>
+      <div class="form-actions">        <button type="submit" class="btn generate-btn"><img src="images/Calendar Pencil Icon.svg" alt="Generate" style="width:22px;margin-right:8px;">Generate Calendar</button>
+        <button type="button" id="downloadBtn" class="btn download-btn" style="display:none;"><img src="images/Download Icon.svg" alt="Download" style="width:22px;margin-right:8px;">Download Excel</button>
       </div>
       <div id="output"></div>
     </form>
   </template>
+
+  <template id="attendancePageTemplate">
+    <h2><span class="heading-icon-circle"><img src="images/Checklist Icon.svg" alt="Attendance" style="width:28px;height:28px;"></span>Employee Shift Tracker</h2>
+      <!-- Employee Form Section -->
+    <div class="attendance-container">
+      <div class="employee-form-section">
+        <h3>Add Employee</h3>
+        <form id="employeeForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="employeeName">Employee Name *</label>
+              <input type="text" id="employeeName" placeholder="John Smith" required maxlength="50">
+            </div>
+            <div class="form-group">
+              <label for="employeeId">Employee ID</label>
+              <input type="text" id="employeeId" placeholder="EMP001" maxlength="20">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="employeeEmail">Email Address</label>
+              <input type="email" id="employeeEmail" placeholder="john@company.com" maxlength="100">
+            </div>
+            <div class="form-group">
+              <label for="employeeTitle">Job Title *</label>
+              <input type="text" id="employeeTitle" placeholder="Sales Representative" required maxlength="50">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="employeePhone">Phone (Optional)</label>
+              <input type="tel" id="employeePhone" placeholder="555-123-4567" maxlength="20">
+            </div>
+            <div class="form-group">
+              <label for="employeeColor">Color Code</label>
+              <div style="position: relative;">
+                <input type="color" id="employeeColor" value="#4CAF50">
+                <div class="color-indicator" style="background-color: #4CAF50;"></div>
+              </div>
+            </div>
+          </div>          <!-- Shift Times Section -->
+          <h4>Shift Schedule</h4>
+          <div class="shift-preset-container">
+            <label style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; display: block;">Quick Shift Templates:</label>            <div class="shift-preset-buttons">
+              <button type="button" class="preset-btn" data-preset="first-shift">1st Shift (8AM-4:30PM)</button>
+              <button type="button" class="preset-btn" data-preset="second-shift">2nd Shift (9AM-5:30PM)</button>
+              <button type="button" class="preset-btn" data-preset="third-shift">3rd Shift (11:30AM-8PM)</button>
+              <button type="button" class="preset-btn custom active" data-preset="custom">Custom</button>
+            </div>
+          </div>
+          <div class="shift-times-grid">
+            <div class="form-group">
+              <label for="shiftStart">Shift Start *</label>
+              <input type="time" id="shiftStart" required>
+            </div>
+            <div class="form-group">
+              <label for="firstBreak">1st Break</label>
+              <input type="time" id="firstBreak">
+            </div>
+            <div class="form-group">
+              <label for="lunchBreak">Lunch Break</label>
+              <input type="time" id="lunchBreak">
+            </div>
+            <div class="form-group">
+              <label for="secondBreak">2nd Break</label>
+              <input type="time" id="secondBreak">
+            </div>
+            <div class="form-group">
+              <label for="shiftEnd">Shift End *</label>
+              <input type="time" id="shiftEnd" required>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn add-employee-btn">
+              Add Employee
+            </button>
+            <button type="button" id="clearFormBtn" class="btn clear-btn">
+              Clear Form
+            </button>
+          </div>
+        </form>
+      </div>      <!-- Bulk Upload Section -->
+      <div class="bulk-upload-section">
+        <h3>Bulk Upload</h3>
+        <div class="upload-area" id="csvUploadArea">
+          <input type="file" id="csvFileInput" accept=".csv,.xlsx,.xls" style="display:none;">
+          <div class="upload-placeholder">
+            <p>Drop CSV/Excel file here or click to browse</p>
+            <small>Supports up to 60 employees</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee List Preview -->
+      <div class="employee-list-section">
+        <div class="employee-list-header">
+          <h3>Employee List (<span id="employeeCount">0</span>/60)</h3>
+          <div class="list-actions">
+            <button id="exportListBtn" class="btn export-btn">Export List</button>
+            <button id="clearAllBtn" class="btn clear-all-btn">Clear All</button>
+          </div>
+        </div>
+        <div class="employee-list" id="employeeList">
+          <div class="empty-state">
+            <p>No employees added yet. Add your first employee above!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate Tracker -->
+      <div class="generate-section">
+        <button id="generateTrackerBtn" class="btn generate-btn" disabled>
+          Generate Shift Tracker
+        </button>
+        <div id="trackerOutput"></div>
+      </div>
+    </div>  </template>
+
+  <!-- Application Scripts -->
   <script type="module" src="main.js"></script>
 </body>
 </html>

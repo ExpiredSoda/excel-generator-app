@@ -1,4 +1,20 @@
 /* =========================
+   BUTTON GLOSSARY
+   =========================
+   .btn              - Base button style (all buttons)
+   .generate-btn     - Green gradient, used for primary actions (e.g., Generate)
+   .download-btn     - Orange gradient, used for download actions
+   .add-employee-btn - Teal/blue gradient, used for adding employees
+   .clear-btn        - Gray gradient, used for clearing forms
+   .export-btn       - Gray gradient, used for exporting lists
+   .clear-all-btn    - Gray gradient, used for clearing all items
+   .edit-btn         - Yellow, used for editing items
+   .delete-btn       - Red, used for deleting items
+   #generateTrackerBtn - Green gradient, used for generating trackers (inherits .btn)
+=========================
+*/
+
+/* =========================
    Global Styles & Body
    ========================= */
 body {
@@ -335,142 +351,6 @@ body {
   transform: rotate(45deg);
 }
 
-.generate-btn,
-.download-btn {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.generate-btn:hover,
-.download-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-  background: linear-gradient(135deg, #45a049, #4CAF50);
-}
-
-.generate-btn:active,
-.download-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.download-btn {
-  background: linear-gradient(135deg, #FFA500, #FF7F50); /* Orange to Coral */
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
-  margin-top: 20px;
-}
-
-.download-btn:hover {
-  background: linear-gradient(135deg, #FF7F50, #FFA500);
-  box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
-}
-
-/* =========================
-   Heading Icon Circle
-   ========================= */
-
-.heading-icon-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: #20b38781;
-  border-radius: 50%;
-  margin-right: 12px;
-  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
-  vertical-align: middle;
-  transition: all 0.3s ease;
-}
-
-.heading-icon-circle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(76, 175, 80, 0.5);
-}
-
-/* =========================
-   Calendar Preview Styling
-   ========================= */
-.calendar-preview-section {
-  width: 100%;
-  max-width: 700px;
-  margin: 48px auto 0 auto;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(32,179,136,0.08);
-  padding: 32px 24px 24px 24px;
-  border: 1.5px solid #e1e8ed;
-}
-.calendar-preview-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #20b388;
-  margin-bottom: 18px;
-  text-align: center;
-}
-.calendar-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 18px;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(32,179,136,0.07);
-}
-.calendar-table th, .calendar-table td {
-  border: 1px solid #e1e8ed;
-  text-align: center;
-  padding: 8px 0;
-  min-width: 36px;
-  font-size: 1rem;
-}
-.calendar-table th {
-  background: #20b388;
-  color: #fff;
-  font-weight: 600;
-  font-size: 1.05rem;
-}
-.calendar-date {
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 4px;
-}
-.calendar-event-row {
-  height: 1.5em;
-  background: #f4f8f6;
-  border-radius: 4px;
-  margin: 2px 0;
-}
-.calendar-legend {
-  margin-top: 18px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.calendar-legend-item {
-  display: inline-block;
-  padding: 6px 16px;
-  border-radius: 16px;
-  color: #fff;
-  font-weight: 600;
-  margin-right: 8px;
-  font-size: 0.98rem;
-  box-shadow: 0 1px 4px rgba(32,179,136,0.10);
-}
-
 /* =========================
    Modern Toast Notification
    ========================= */
@@ -498,32 +378,899 @@ body {
   opacity: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 15px;
+/* =========================
+   Attendance Tracker Styles
+   ========================= */
+
+.attendance-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.employee-form-section,
+.bulk-upload-section,
+.employee-list-section,
+.generate-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.employee-list-section {
+  grid-column: 1 / -1; /* Full width */
+}
+
+.generate-section {
+  grid-column: 1 / -1; /* Full width */
+  text-align: center;
+}
+
+/* =========================
+   Section Headers with Icons
+   ========================= */
+.employee-form-section h3,
+.bulk-upload-section h3,
+.employee-list-section h3 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.employee-form-section h3:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: url('images/Employee Add Icon.svg') center/contain no-repeat;
+  margin-right: 10px;
+}
+
+.employee-form-section h4 {
+  display: flex;
+  align-items: center;
+  margin: 20px 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.employee-form-section h4:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url('images/Stopwatch Employee Icon.svg') center/contain no-repeat;
+  margin-right: 8px;
+}
+
+.bulk-upload-section h3:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: url('images/Upload File Icon.svg') center/contain no-repeat;
+  margin-right: 10px;
+}
+
+.employee-list-section h3:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: url('images/Checkerboard Icon.svg') center/contain no-repeat;
+  margin-right: 10px;
+}
+
+/* =========================
+   Form Styling
+   ========================= */
+.shift-preset-container {
+  margin: 15px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+
+.shift-preset-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.preset-btn {
+  padding: 8px 16px;
+  border: 2px solid #20b388;
+  background: white;
+  color: #20b388;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover,
+.preset-btn.active {
+  background: #20b388;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.preset-btn.custom {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.preset-btn.custom:hover,
+.preset-btn.custom.active {
+  background: #6c757d;
+  color: white;
+}
+
+.shift-times-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  margin: 15px 0;
+  align-items: end; /* Align all items to bottom for consistent baseline */
+}
+
+.shift-times-grid .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.shift-times-grid .form-group label {
+  height: 40px; /* Fixed height for all labels */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.shift-times-grid .form-group input[type="time"] {
+  height: 40px; /* Fixed height for all inputs */
+  padding: 10px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  text-align: center;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.form-group input[type="time"]:focus {
+  border-color: #20b388;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(32, 179, 136, 0.1);
+}
+
+.form-group input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  opacity: 0;
+  z-index: 2;
+}
+
+/* =========================
+   Color picker styling to match calendar
+   ========================= */
+.form-group {
+  position: relative;
+}
+
+.form-group input[type="color"] + .color-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  z-index: 1;
+  background-color: #4CAF50;
+}
+
+.form-group input[type="color"]:hover + .color-indicator,
+.color-indicator:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   Modern Button Styles
+   ========================= */
+.add-employee-btn,
+.clear-btn,
+.export-btn,
+.clear-all-btn,
+.generate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.add-employee-btn {
+  background: linear-gradient(135deg, #20b388, #17a2b8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(32, 179, 136, 0.3);
+}
+
+.add-employee-btn:hover {
+  background: linear-gradient(135deg, #1a9d7a, #138496);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(32, 179, 136, 0.4);
+}
+
+.clear-btn,
+.export-btn,
+.clear-all-btn {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.clear-btn:hover,
+.export-btn:hover,
+.clear-all-btn:hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+}
+
+#generateTrackerBtn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+#generateTrackerBtn:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url('images/Checklist Icon.svg') center/contain no-repeat;
+  margin-right: 8px;
+}
+
+#generateTrackerBtn:hover {
+  background: linear-gradient(135deg, #45a049, #4CAF50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+#generateTrackerBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#generateTrackerBtn:disabled:hover {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =========================
+   Bulk Upload Area
+   ========================= */
+.upload-area {
+  border: 3px dashed #20b388;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(32, 179, 136, 0.05);
+}
+
+.upload-area:hover {
+  border-color: #17a2b8;
+  background: rgba(32, 179, 136, 0.1);
+}
+
+.upload-area.dragover {
+  border-color: #007bff;
+  background: rgba(0, 123, 255, 0.1);
+  transform: scale(1.02);
+}
+
+.upload-placeholder p {
+  margin: 10px 0 5px 0;
+  font-weight: 600;
+  color: #20b388;
+}
+
+.upload-placeholder small {
+  color: #6c757d;
+}
+
+/* =========================
+   Employee List
+   ========================= */
+.employee-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.employee-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+}
+
+.employee-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #f1f3f4;
+  transition: background-color 0.2s ease;
+}
+
+.employee-card:hover {
+  background-color: #f8f9fa;
+}
+
+.employee-card:last-child {
+  border-bottom: none;
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.employee-color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.employee-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.employee-details p {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.employee-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #212529;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* =========================
+   Empty State with Modern Icon
+   ========================= */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+  position: relative;
+}
+
+.empty-state p {
+  margin: 15px 0 0 0;
+  font-size: 16px;
+}
+
+/* =========================
+   Validation Styles
+   ========================= */
+.form-group.error input {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.form-group.success input {
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+/* =========================
+   Alert Messages
+   ========================= */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 500;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+/* =========================
+   Modern Toast Notifications
+   ========================= */
+.modern-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  z-index: 10000;
+  min-width: 350px;
+  max-width: 500px;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modern-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+  position: relative;
+}
+
+.toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #2c3e50;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toast-close:hover {
+  background: rgba(108, 117, 125, 0.1);
+  color: #495057;
+}
+
+/* =========================
+   Toast Type Styles
+   ========================= */
+.modern-toast-success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border-left: 4px solid #28a745;
+}
+
+.modern-toast-error {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  border-left: 4px solid #dc3545;
+}
+
+.modern-toast-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-left: 4px solid #ffc107;
+}
+
+.modern-toast-info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  border-left: 4px solid #17a2b8;
+}
+
+.modern-toast-confirm {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-left: 4px solid #6c757d;
+}
+
+/* =========================
+   Toast Actions
+   ========================= */
+.toast-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.toast-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.toast-btn-cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.toast-btn-cancel:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.toast-btn-confirm {
+  background: #dc3545;
+  color: white;
+}
+
+.toast-btn-confirm:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   Toast Animation
+   ========================= */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(-50%) translateY(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-50%) translateY(-100px);
+    opacity: 0;
+  }
+}
+
+/* =========================
+   Responsive Toast
+   ========================= */
+@media (max-width: 500px) {
+  .modern-toast {
+    left: 10px;
+    right: 10px;
+    min-width: auto;
+    max-width: none;
+    transform: translateY(-100px);
   }
   
-  .form-actions {
-    flex-direction: column;
+  .modern-toast.show {
+    transform: translateY(0);
+  }
+  
+  .toast-content {
+    padding: 14px 16px;
+  }
+  
+  .toast-message {
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   Responsive Design
+   ========================= */
+@media (max-width: 768px) {
+  .attendance-container {
+    grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .shift-times-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .employee-list-header {
+    flex-direction: column;
+    gap: 15px;
     align-items: stretch;
   }
   
-  .generate-btn,
-  .download-btn {
+  .list-actions {
     justify-content: center;
   }
-  
-  .legend-field-group {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  
-  .legend-color-picker-container {
-    align-self: flex-start;
-    margin-right: 0;
-  }
+}
+
+/* =========================
+   Homepage Intro Section
+   ========================= */
+.homepage-intro-styled {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32,179,136,0.07);
+  padding: 40px 32px 32px 32px;
+  border: 1.5px solid #e1e8ed;
+}
+.homepage-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #20b388;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.homepage-intro-text {
+  font-size: 1.15rem;
+  color: #222;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+.homepage-intro-contact {
+  font-size: 1.08rem;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+/* =========================
+   Homepage Updates Section
+   ========================= */
+.homepage-updates-styled {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32,179,136,0.04);
+  padding: 32px 32px 24px 32px;
+  border: 1.5px solid #e1e8ed;
+}
+.homepage-updates-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #20b388;
+  margin-bottom: 16px;
+}
+.homepage-updates-list {
+  font-size: 1.05rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* =========================
+   Base Button Styles
+   ========================= */
+.btn {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.generate-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+.generate-btn:hover {
+  background: linear-gradient(135deg, #45a049, #4CAF50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+.generate-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #FFA500, #FF7F50);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+  margin-top: 20px;
+}
+.download-btn:hover {
+  background: linear-gradient(135deg, #FF7F50, #FFA500);
+  box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
+  transform: translateY(-2px);
+}
+.download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
+}
+
+.add-employee-btn {
+  background: linear-gradient(135deg, #20b388, #17a2b8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(32, 179, 136, 0.3);
+}
+.add-employee-btn:hover {
+  background: linear-gradient(135deg, #1a9d7a, #138496);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(32, 179, 136, 0.4);
+}
+
+.clear-btn,
+.export-btn,
+.clear-all-btn {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+.clear-btn:hover,
+.export-btn:hover,
+.clear-all-btn:hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #212529;
+}
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+.delete-btn:hover {
+  background: #c82333;
+}
+
+#generateTrackerBtn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+#generateTrackerBtn:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url('images/Checklist Icon.svg') center/contain no-repeat;
+  margin-right: 8px;
+}
+#generateTrackerBtn:hover {
+  background: linear-gradient(135deg, #45a049, #4CAF50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+#generateTrackerBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+#generateTrackerBtn:disabled:hover {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
 }
