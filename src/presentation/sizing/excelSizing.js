@@ -1,9 +1,6 @@
 // presentation/sizing/excelSizing.js
 // Universal auto-sizing utilities for Excel worksheets
 
-// Debug: Track module loading
-console.log('✓ ExcelSizing: Module loaded');
-
 /**
  * Row height constants for different content types
  */
@@ -297,7 +294,6 @@ export function applyAutoSizing(sheet, sheetType = 'standard', options = {}) {
     sheet.freezePanes = options.freezePanes || { row: 1, col: 0 };
   }
   
-  console.log(`✅ AutoSizing: Applied for ${sheetType} sheet (${columnDefs.length} columns)`);
   return true;
 }
 

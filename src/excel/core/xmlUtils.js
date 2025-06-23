@@ -1,8 +1,6 @@
 // excel/core/xmlUtils.js
 // XML utility functions for Excel generation
 
-console.log('✓ XmlUtils: Module loaded');
-
 /**
  * Escapes special XML characters in strings
  * @param {any} unsafe - Value to escape

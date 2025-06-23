@@ -1,8 +1,6 @@
 // excel/core/excelSheet.js
 // Excel worksheet representation and XML generation
 
-console.log('✓ ExcelSheet: Module loaded');
-
 /**
  * Represents a complete Excel worksheet
  */

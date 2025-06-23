@@ -25,5 +25,3 @@ export {
   generateColumnsXML,
   generateRowXML
 } from './sizing/excelSizing.js';
-
-console.log('✅ Presentation: All modules loaded and exported');

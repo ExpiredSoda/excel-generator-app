@@ -1,15 +1,7 @@
 // previewCalendar.js
 // Generates an HTML preview of the calendar for the UI
 
-// Debug: Track module loading
-console.log('✓ PreviewCalendar: Module loaded');
-
 export function renderCalendarPreview({ year, month, eventRows, legendValues, legendColors }) {
-  console.log('🔍 PreviewCalendar: Rendering preview...', {
-    year, month, eventRows,
-    legendValuesCount: legendValues?.length || 0,
-    legendColorsCount: legendColors?.length || 0
-  });
   const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"

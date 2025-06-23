@@ -4,19 +4,8 @@ import { escapeXml } from '../../core/index.js';
 import { STYLE_IDS, COLUMN_WIDTHS } from '../../../presentation/index.js';
 import { createAttendanceColumns, generateColumnsXML, generateRowXML, ROW_HEIGHTS } from '../../../presentation/sizing/excelSizing.js';
 
-// Debug: Track successful imports and module loading
-console.log('✓ AttendanceReference imports loaded:', {
-  escapeXml: typeof escapeXml,
-  createAttendanceColumns: typeof createAttendanceColumns,
-  generateColumnsXML: typeof generateColumnsXML,
-  generateRowXML: typeof generateRowXML,
-  ROW_HEIGHTS: typeof ROW_HEIGHTS
-});
-
 export function buildReferenceSheet(employees) {
-  console.log('👥 AttendanceReference: Building reference sheet...', {
-    employeeCount: employees?.length || 0
-  });  const headers = ['Employee', 'Shift Hours', 'Daily Total', 'Email'];
+  const headers = ['Employee', 'Shift Hours', 'Daily Total', 'Email'];
   // Generate column definitions using enhanced auto-sizing with universal constants
   const referenceColumns = [
     { min: 1, max: 1, width: COLUMN_WIDTHS.name },        // Employee (20)

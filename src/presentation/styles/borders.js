@@ -1,8 +1,6 @@
 // presentation/styles/borders.js
 // Border definitions for Excel styling
 
-console.log('✓ Borders: Module loaded');
-
 /**
  * Standard border patterns
  */

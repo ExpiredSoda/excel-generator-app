@@ -1,11 +1,10 @@
 // excel/utils/zipUtils.js
 // Shared ZIP utility for creating Excel files
 
-// Debug: Track module loading
-console.log('✓ ZipUtils: Module loaded');
+// Debug logs removed
 
 export function createZip(files) {
-  console.log('📦 ZipUtils: Creating ZIP with files:', files.map(f => f.name));
+  // Debug logs removed
   // Create a simple ZIP file structure
   // This is a minimal ZIP implementation for Excel files
   

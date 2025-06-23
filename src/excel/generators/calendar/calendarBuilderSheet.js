@@ -4,26 +4,10 @@ import { ExcelSheet, ExcelCell, ExcelRow, ConditionalFormattingRule } from '../.
 import { createCalendarColumns, applyAutoSizing, ROW_HEIGHTS } from '../../../presentation/sizing/excelSizing.js';
 import { STYLE_IDS, getCustomStyleId } from '../../../presentation/index.js';
 
-// Debug: Track successful imports
-console.log('✓ CalendarSheet imports loaded:', {
-  ExcelSheet: typeof ExcelSheet,
-  ExcelCell: typeof ExcelCell,
-  ExcelRow: typeof ExcelRow,
-  ConditionalFormattingRule: typeof ConditionalFormattingRule,
-  createCalendarColumns: typeof createCalendarColumns,
-  applyAutoSizing: typeof applyAutoSizing,
-  ROW_HEIGHTS: typeof ROW_HEIGHTS,
-  STYLE_IDS: typeof STYLE_IDS,
-  getCustomStyleId: typeof getCustomStyleId
-});
+// Debug logs removed
 
 export function buildCalendarSheetWithExcelBuilder(year, month, eventRows, includeDrawing, legendValues = null, customColors = null) {
-  console.log('📅 CalendarSheet: Building calendar...', {
-    year, month, eventRows, includeDrawing,
-    legendValuesProvided: !!legendValues,
-    customColorsProvided: !!customColors
-  });
-  
+  // Debug logs removed
   const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
@@ -37,12 +21,7 @@ export function buildCalendarSheetWithExcelBuilder(year, month, eventRows, inclu
     "Work", "Travel", "Study", "Event"
   ];  const actualLegendValues = legendValues || defaultLegendValues.slice(0, eventRows);
   
-  console.log('📊 CalendarSheet: Calendar data prepared:', {
-    monthName: monthNames[month],
-    daysInMonth,
-    startDay,
-    legendValues: actualLegendValues
-  });  // Create calendar sheet with auto-sizing
+  // Create calendar sheet with auto-sizing
   const sheet = new ExcelSheet("Calendar");
   const columnDefs = createCalendarColumns();
   

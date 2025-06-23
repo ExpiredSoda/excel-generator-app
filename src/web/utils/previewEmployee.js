@@ -1,13 +1,7 @@
 // utils/previewEmployee.js
 // Generates HTML preview of employee cards for the attendance tracker UI
 
-// Debug: Track module loading
-console.log('✓ PreviewEmployee: Module loaded');
-
 export function renderEmployeePreview(employees) {
-  console.log('👥 PreviewEmployee: Rendering employee preview...', {
-    employeeCount: employees?.length || 0
-  });
   if (!employees || employees.length === 0) {
     return `
       <div class="preview-section">
@@ -69,10 +63,10 @@ export function renderEmployeePreview(employees) {
           </div>
         </div>
         <div class="employee-actions">
-          <button class="btn btn-sm btn-outline-primary" onclick="attendanceTracker.editEmployee(${index})">
+          <button class="btn edit-btn btn-sm" onclick="attendanceTracker.editEmployee(${index})">
             <i class="fas fa-edit"></i> Edit
           </button>
-          <button class="btn btn-sm btn-outline-danger" onclick="attendanceTracker.removeEmployee(${index})">
+          <button class="btn delete-btn btn-sm" onclick="attendanceTracker.removeEmployee(${index})">
             <i class="fas fa-trash"></i> Remove
           </button>
         </div>

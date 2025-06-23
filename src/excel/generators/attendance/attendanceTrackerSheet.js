@@ -4,20 +4,7 @@ import { escapeXml } from '../../core/index.js';
 import { STYLE_IDS } from '../../../presentation/index.js';
 import { createAttendanceColumns, generateColumnsXML, generateRowXML, ROW_HEIGHTS } from '../../../presentation/sizing/excelSizing.js';
 
-// Debug: Track successful imports and module loading
-console.log('✓ AttendanceShiftTracker imports loaded:', {
-  escapeXml: typeof escapeXml,
-  STYLE_IDS: typeof STYLE_IDS,
-  createAttendanceColumns: typeof createAttendanceColumns,
-  generateColumnsXML: typeof generateColumnsXML,
-  generateRowXML: typeof generateRowXML,
-  ROW_HEIGHTS: typeof ROW_HEIGHTS
-});
-
 export function buildShiftTrackerSheet(employees) {
-  console.log('📊 AttendanceShiftTracker: Building shift tracker sheet...', {
-    employeeCount: employees?.length || 0
-  });
   const headers = [
     'Employee Name', 'ID', 'Job Title', 'Shift Start', 'First Break', 
     'Lunch Break', 'Second Break', 'Shift End', 'Monday', 'Tuesday', 

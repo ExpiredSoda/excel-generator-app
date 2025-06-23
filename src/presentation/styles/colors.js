@@ -1,8 +1,6 @@
 // presentation/styles/colors.js
 // Color constants for consistent theming
 
-console.log('✓ Colors: Module loaded');
-
 /**
  * Standard color palette used across all Excel generators
  */

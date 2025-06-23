@@ -1,11 +1,10 @@
 // generators/attendance/workbookXml.js
 // Generates workbook structure XML for shift tracker (workbook only)
 
-// Debug: Track module loading
-console.log('✓ AttendanceWorkbook: Module loaded');
+// Debug logs removed
 
 export function getShiftTrackerWorkbookXML() {
-  console.log('📚 AttendanceWorkbook: Generating shift tracker workbook...');
+  // Debug logs removed
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <sheets>

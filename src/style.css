@@ -1,20 +1,4 @@
 /* =========================
-   BUTTON GLOSSARY
-   =========================
-   .btn              - Base button style (all buttons)
-   .generate-btn     - Green gradient, used for primary actions (e.g., Generate)
-   .download-btn     - Orange gradient, used for download actions
-   .add-employee-btn - Teal/blue gradient, used for adding employees
-   .clear-btn        - Gray gradient, used for clearing forms
-   .export-btn       - Gray gradient, used for exporting lists
-   .clear-all-btn    - Gray gradient, used for clearing all items
-   .edit-btn         - Yellow, used for editing items
-   .delete-btn       - Red, used for deleting items
-   #generateTrackerBtn - Green gradient, used for generating trackers (inherits .btn)
-=========================
-*/
-
-/* =========================
    Global Styles & Body
    ========================= */
 body {
@@ -22,6 +6,159 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background: #fff;
   color: #202020;
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+.flex {
+  display: flex !important;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   Button Styles
+   ========================= */
+.btn {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  font-size: 14px;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.generate-btn,
+.add-employee-btn,
+.btn-green {
+  background: #4CAF50;
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+}
+.generate-btn:hover,
+.add-employee-btn:hover,
+.btn-green:hover {
+  background: #388e3c;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.22);
+  transform: translateY(-2px) scale(1.01);
+}
+.generate-btn:active,
+.add-employee-btn:active,
+.btn-green:active {
+  background: #388e3c;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.13);
+  transform: none;
+}
+#generateTrackerBtn:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: url('images/Checklist Icon.svg') center/contain no-repeat;
+  margin-right: 8px;
+}
+#generateTrackerBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+#generateTrackerBtn:disabled:hover {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+}
+.btn-sm {
+  padding: 4px 12px;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+/* Teal Download Button (Active) */
+.download-btn {
+  background: #17a2b8;
+  color: white;
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.15);
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.download-btn:hover {
+  background: #138496;
+  box-shadow: 0 8px 24px rgba(19, 132, 150, 0.22);
+  transform: translateY(-2px) scale(1.01);
+}
+.download-btn:active {
+  background: #138496;
+  box-shadow: 0 2px 8px rgba(19, 132, 150, 0.13);
+  transform: none;
+}
+
+/* Gray Clear All Button */
+.clear-all-btn {
+  background: #f4f4f4;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.clear-all-btn:hover {
+  background: #e0e0e0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-2px) scale(1.01);
+}
+.clear-all-btn:active {
+  background: #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  transform: none;
+}
+
+/* Blue Custom Button */
+.custom-btn {
+  background: #1e88e5;
+  color: white;
+  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15);
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.custom-btn:hover {
+  background: #1565c0;
+  box-shadow: 0 8px 24px rgba(30, 136, 229, 0.22);
+  transform: translateY(-2px) scale(1.01);
+}
+.custom-btn:active {
+  background: #1565c0;
+  box-shadow: 0 2px 8px rgba(30, 136, 229, 0.13);
+  transform: none;
+}
+
+/* Neutral Gray Custom Button (Preset) */
+.preset-btn.custom-btn {
+  border-color: #e0e0e0;
+  background: #f4f4f4;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.preset-btn.custom-btn:hover,
+.preset-btn.custom-btn.active {
+  background: #e0e0e0;
+  color: #222;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-2px) scale(1.01);
 }
 
 /* =========================
@@ -102,16 +239,6 @@ body {
 }
 
 /* =========================
-   Download Button (Calendar)
-   ========================= */
-#downloadTestZipBtn {
-  margin-top: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* =========================
    Responsive Design
    ========================= */
 @media (max-width: 800px) {
@@ -132,7 +259,7 @@ body {
 }
 
 /* =========================
-   Legend Input Fields
+   Legend & Color Picker Styles
    ========================= */
 .legend-fields {
   margin: 15px 0;
@@ -235,9 +362,26 @@ body {
 }
 
 /* =========================
-   Modern Form Styling
+   Legend Fields Title/Icon
    ========================= */
+.legend-fields-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+.legend-fields-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
 
+/* =========================
+   Form & Input Styles
+   ========================= */
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -352,7 +496,7 @@ body {
 }
 
 /* =========================
-   Modern Toast Notification
+   Toast & Notification Styles
    ========================= */
 .calendar-toast {
   visibility: hidden;
@@ -379,9 +523,8 @@ body {
 }
 
 /* =========================
-   Attendance Tracker Styles
+   Attendance & Employee Tracker Styles
    ========================= */
-
 .attendance-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -603,90 +746,6 @@ body {
 }
 
 /* =========================
-   Modern Button Styles
-   ========================= */
-.add-employee-btn,
-.clear-btn,
-.export-btn,
-.clear-all-btn,
-.generate-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  text-decoration: none;
-  min-height: 44px;
-}
-
-.add-employee-btn {
-  background: linear-gradient(135deg, #20b388, #17a2b8);
-  color: white;
-  box-shadow: 0 4px 12px rgba(32, 179, 136, 0.3);
-}
-
-.add-employee-btn:hover {
-  background: linear-gradient(135deg, #1a9d7a, #138496);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(32, 179, 136, 0.4);
-}
-
-.clear-btn,
-.export-btn,
-.clear-all-btn {
-  background: linear-gradient(135deg, #6c757d, #5a6268);
-  color: white;
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
-
-.clear-btn:hover,
-.export-btn:hover,
-.clear-all-btn:hover {
-  background: linear-gradient(135deg, #5a6268, #495057);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
-}
-
-#generateTrackerBtn {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-}
-
-#generateTrackerBtn:before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  background: url('images/Checklist Icon.svg') center/contain no-repeat;
-  margin-right: 8px;
-}
-
-#generateTrackerBtn:hover {
-  background: linear-gradient(135deg, #45a049, #4CAF50);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-}
-
-#generateTrackerBtn:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-#generateTrackerBtn:disabled:hover {
-  background: #6c757d;
-  transform: none;
-  box-shadow: none;
-}
-
-/* =========================
    Bulk Upload Area
    ========================= */
 .upload-area {
@@ -834,7 +893,7 @@ body {
 }
 
 /* =========================
-   Validation Styles
+   Validation & Alert Styles
    ========================= */
 .form-group.error input {
   border-color: #dc3545;
@@ -1097,7 +1156,7 @@ body {
 }
 
 /* =========================
-   Homepage Intro Section
+   Homepage Styles
    ========================= */
 .homepage-intro-styled {
   max-width: 800px;
@@ -1128,9 +1187,6 @@ body {
   margin-bottom: 0;
 }
 
-/* =========================
-   Homepage Updates Section
-   ========================= */
 .homepage-updates-styled {
   max-width: 800px;
   margin: 0 auto 40px auto;
@@ -1155,122 +1211,181 @@ body {
 }
 
 /* =========================
-   Base Button Styles
+   Calendar Builder & Preview Styles
    ========================= */
-.btn {
-  border: none;
-  padding: 12px 24px;
+.calendar-preview-section {
+  width: 100%;
+  max-width: 700px;
+  margin: 48px auto 0 auto;
+  background: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(32,179,136,0.08);
+  padding: 32px 24px 24px 24px;
+  border: 1.5px solid #e1e8ed;
+}
+.calendar-preview-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
+  padding: 18px 0;
+  border-radius: 8px 8px 0 0;
+  margin: -32px -24px 18px -24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(32,179,136,0.07);
+}
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: #fff;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(32,179,136,0.07);
+}
+.calendar-table th, .calendar-table td {
+  border: 1px solid #e1e8ed;
+  text-align: center;
+  padding: 8px 0;
+  min-width: 36px;
+  font-size: 1rem;
+}
+.calendar-table th {
+  background: #20b388;
+  color: #fff;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  text-decoration: none;
-  min-height: 44px;
-  display: inline-flex;
+  font-size: 1.05rem;
+}
+.calendar-date {
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px;
+}
+.calendar-event-row {
+  height: 1.5em;
+  background: #f4f8f6;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+.calendar-legend {
+  margin-top: 18px;
+  font-size: 1rem;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-
-.generate-btn {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-}
-.generate-btn:hover {
-  background: linear-gradient(135deg, #45a049, #4CAF50);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-}
-.generate-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.download-btn {
-  background: linear-gradient(135deg, #FFA500, #FF7F50);
-  color: white;
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
-  margin-top: 20px;
-}
-.download-btn:hover {
-  background: linear-gradient(135deg, #FF7F50, #FFA500);
-  box-shadow: 0 6px 20px rgba(255, 127, 80, 0.4);
-  transform: translateY(-2px);
-}
-.download-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
-}
-
-.add-employee-btn {
-  background: linear-gradient(135deg, #20b388, #17a2b8);
-  color: white;
-  box-shadow: 0 4px 12px rgba(32, 179, 136, 0.3);
-}
-.add-employee-btn:hover {
-  background: linear-gradient(135deg, #1a9d7a, #138496);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(32, 179, 136, 0.4);
-}
-
-.clear-btn,
-.export-btn,
-.clear-all-btn {
-  background: linear-gradient(135deg, #6c757d, #5a6268);
-  color: white;
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
-.clear-btn:hover,
-.export-btn:hover,
-.clear-all-btn:hover {
-  background: linear-gradient(135deg, #5a6268, #495057);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
-}
-
-.edit-btn {
-  background: #ffc107;
-  color: #212529;
-}
-.edit-btn:hover {
-  background: #e0a800;
-}
-
-.delete-btn {
-  background: #dc3545;
-  color: white;
-}
-.delete-btn:hover {
-  background: #c82333;
-}
-
-#generateTrackerBtn {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-}
-#generateTrackerBtn:before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  background: url('images/Checklist Icon.svg') center/contain no-repeat;
+.calendar-legend-item {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 16px;
+  color: #fff;
+  font-weight: 600;
   margin-right: 8px;
+  font-size: 0.98rem;
+  box-shadow: 0 1px 4px rgba(32,179,136,0.10);
 }
-#generateTrackerBtn:hover {
-  background: linear-gradient(135deg, #45a049, #4CAF50);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+
+/* =========================
+   Meeting Tracker Styles
+   ========================= */
+
+/* =========================
+   Contact Me Styles
+   ========================= */
+.contact-container {
+  max-width: 480px;
+  margin: 48px auto 0 auto;
+  padding: 36px 32px 28px 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(32,179,136,0.10), 0 1.5px 8px rgba(32,179,136,0.04);
+  border: 1.5px solid #e1e8ed;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
-#generateTrackerBtn:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+.contact-container h2, .contact-container h3, .contact-container h4 {
+  margin-bottom: 24px;
+  color: #20b388;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.5px;
 }
-#generateTrackerBtn:disabled:hover {
-  background: #6c757d;
-  transform: none;
-  box-shadow: none;
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contact-form label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #d1e7dd;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #f8f9fa;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1.5px 6px rgba(32,179,136,0.04);
+  margin-bottom: 0;
+}
+.contact-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #20b388;
+  box-shadow: 0 0 0 2px rgba(32,179,136,0.10);
+  outline: none;
+  background: #fff;
+}
+.contact-form .btn {
+  margin-top: 8px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(32,179,136,0.10);
+  padding: 14px 0;
+  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
+}
+.contact-form .btn:hover {
+  background: linear-gradient(90deg, #45a049 60%, #20b388 100%);
+  box-shadow: 0 4px 24px rgba(32,179,136,0.16);
+  transform: translateY(-2px) scale(1.01);
+}
+@media (max-width: 600px) {
+  .contact-container {
+    max-width: 98vw;
+    padding: 18px 6vw 18px 6vw;
+  }
+  .contact-form .btn {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+}
+
+/* Small Preset Button */
+.preset-btn-sm {
+  padding: 4px 10px;
+  border: 2px solid #20b388;
+  background: white;
+  color: #20b388;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.preset-btn-sm:hover,
+.preset-btn-sm.active {
+  background: #20b388;
+  color: white;
+  transform: translateY(-1px);
 }

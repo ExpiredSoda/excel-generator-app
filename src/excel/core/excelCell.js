@@ -3,8 +3,6 @@
 
 import { escapeXml } from './xmlUtils.js';
 
-console.log('✓ ExcelCell: Module loaded');
-
 /**
  * Represents a single Excel cell
  */

@@ -4,15 +4,7 @@ import { sanitizeLegendInput } from '../../shared/utils/sanitize.js';
 import { validateLegendInput } from '../../shared/utils/validation.js';
 import { renderCalendarPreview } from '../utils/previewCalendar.js';
 
-// Debug: Track successful imports
-console.log('✓ CalendarBuilder imports loaded:', {
-  sanitizeLegendInput: typeof sanitizeLegendInput,
-  validateLegendInput: typeof validateLegendInput,
-  renderCalendarPreview: typeof renderCalendarPreview
-});
-
 export function setupCalendarBuilder({ buildCalendarSheetWithExcelBuilder, getCalendarStylesXML, getContentTypesXML, getRelsXML, getWorkbookXML, getWorkbookRelsXML, getSheet1InstructionsXML, createZip }) {
-  // Debug: Verify all dependencies are provided
   const dependencies = {
     buildCalendarSheetWithExcelBuilder,
     getCalendarStylesXML,
@@ -23,30 +15,21 @@ export function setupCalendarBuilder({ buildCalendarSheetWithExcelBuilder, getCa
     getSheet1InstructionsXML,
     createZip
   };
-  
-  console.log('✓ CalendarBuilder dependencies check:', 
-    Object.entries(dependencies).map(([name, fn]) => `${name}: ${typeof fn}`).join(', ')
-  );
-  
+
   const missingDeps = Object.entries(dependencies).filter(([name, fn]) => typeof fn !== 'function');
   if (missingDeps.length > 0) {
-    console.error('❌ Missing CalendarBuilder dependencies:', missingDeps.map(([name]) => name));
     throw new Error(`Missing required dependencies: ${missingDeps.map(([name]) => name).join(', ')}`);
-  }  const form = document.getElementById('calendarForm');
+  }
+  const form = document.getElementById('calendarForm');
   const legendFieldsContainer = document.getElementById('legendFieldsContainer');
   const eventRowsSelect = document.getElementById('eventRowsSelect');
   const downloadBtn = document.getElementById('downloadBtn');
   let lastZip = null;
 
-  // Debug: Verify DOM elements exist
   const domElements = { form, legendFieldsContainer, eventRowsSelect, downloadBtn };
-  console.log('✓ CalendarBuilder DOM elements:', 
-    Object.entries(domElements).map(([name, el]) => `${name}: ${el ? '✓' : '❌'}`).join(', ')
-  );
-  
   const missingElements = Object.entries(domElements).filter(([name, el]) => !el);
   if (missingElements.length > 0) {
-    console.warn('⚠️ Missing DOM elements:', missingElements.map(([name]) => name));
+    // Optionally, handle missing elements gracefully here
   }
 
   function generateLegendFields(eventRows) {
@@ -141,36 +124,15 @@ export function setupCalendarBuilder({ buildCalendarSheetWithExcelBuilder, getCa
       const cleanHex = hex.replace('#', '').toUpperCase();
       return 'FF' + cleanHex; // Add full opacity (FF) prefix
     });
-    
-    // Debug: Track color conversion
-    console.log('🎨 Color conversion:', {
-      original: legendColors,
-      converted: legendColorsExcel,
-      count: legendColors.length
-    });
 
-    // Debug: Track Excel generation calls
-    console.log('📊 Generating Excel components...');
-    const generationStart = performance.now();    const calendarSheet = buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, legendValues, legendColorsExcel);
+    const calendarSheet = buildCalendarSheetWithExcelBuilder(year, month, eventRows, false, legendValues, legendColorsExcel);
     const stylesXml = getCalendarStylesXML(eventRows, legendColors, legendColorsExcel);
     const contentTypesXml = getContentTypesXML(includeTracker);
     const relsXml = getRelsXML();
     const workbookXml = getWorkbookXML(includeTracker);
     const workbookRelsXml = getWorkbookRelsXML(includeTracker);
     const instructionsXml = getSheet1InstructionsXML();
-    
-    // Debug: Track successful generation
-    const generationTime = performance.now() - generationStart;
-    console.log(`⚡ Excel generation completed in ${generationTime.toFixed(2)}ms`);
-    console.log('📋 Generated components:', {
-      calendarSheet: !!calendarSheet,
-      stylesXml: !!stylesXml,
-      contentTypesXml: !!contentTypesXml,
-      relsXml: !!relsXml,
-      workbookXml: !!workbookXml,
-      workbookRelsXml: !!workbookRelsXml,
-      instructionsXml: !!instructionsXml
-    });
+
     const files = [
       { name: 'xl/worksheets/sheet1.xml', content: instructionsXml },
       { name: 'xl/worksheets/sheet2.xml', content: calendarSheet },

@@ -5,8 +5,6 @@ import { FONT_IDS } from '../styles/fonts.js';
 import { FILL_IDS } from '../styles/fills.js';
 import { BORDER_IDS } from '../styles/borders.js';
 
-console.log('✓ CellFormats: Module loaded');
-
 /**
  * Base cell format definitions (xf elements)
  * Organized by functionality: Instructions (1-7), Tables (8-17), Calendar (18-21), Utility (22-26), Default (0)

@@ -1,11 +1,10 @@
 // generators/attendance/contentTypesXml.js
 // Generates [Content_Types].xml and relationship files for shift tracker (metadata only)
 
-// Debug: Track module loading
-console.log('✓ AttendanceContentTypes: Module loaded');
+// Debug logs removed
 
 export function getShiftTrackerContentTypesXML() {
-  console.log('📄 AttendanceContentTypes: Generating shift tracker content types...');
+  // Debug logs removed
   return `<?xml version="1.0" encoding="UTF-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>

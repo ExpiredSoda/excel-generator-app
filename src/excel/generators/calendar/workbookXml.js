@@ -1,11 +1,10 @@
 // generators/workbookXml.js
 // Generates workbook.xml and workbook relationships XML
 
-// Debug: Track module loading
-console.log('✓ WorkbookXML: Module loaded');
+// Debug logs removed
 
 export function getWorkbookXML(includeTracker) {
-  console.log('📚 WorkbookXML: Generating workbook XML...', { includeTracker });
+  // Debug logs removed
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <sheets>

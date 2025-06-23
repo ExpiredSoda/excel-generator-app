@@ -7,18 +7,12 @@ import { BORDERS } from './borders.js';
 import { getAllCellFormats } from '../formatting/cellFormats.js';
 import { generateDxfXML } from '../formatting/dxfFormats.js';
 
-console.log('✓ StylesXml: Module loaded');
-
 /**
  * Generate complete styles XML for Excel workbook
  * @param {Array} customColors - Array of custom color strings for calendar legends, etc.
  * @returns {string} Complete styles.xml content
  */
 export function generateStylesXML(customColors = []) {
-  console.log('🎨 StylesXml: Generating universal styles...', {
-    customColorsCount: customColors.length
-  });
-
   // Get all component arrays
   const allFills = getAllFills(customColors);
   const allCellFormats = getAllCellFormats(customColors, allFills.length - customColors.length);

@@ -1,8 +1,6 @@
 // presentation/styles/styleIds.js
 // Style ID constants for easy reference across modules
 
-console.log('✓ StyleIds: Module loaded');
-
 /**
  * Style ID constants for easy reference across generators
  * These map to the index positions in the cell formats array

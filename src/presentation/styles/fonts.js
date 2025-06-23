@@ -1,8 +1,6 @@
 // presentation/styles/fonts.js
 // Font definitions for Excel styling
 
-console.log('✓ Fonts: Module loaded');
-
 /**
  * Standard font definitions used across all Excel generators
  */

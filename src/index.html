@@ -136,10 +136,10 @@
           <h4>Shift Schedule</h4>
           <div class="shift-preset-container">
             <label style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; display: block;">Quick Shift Templates:</label>            <div class="shift-preset-buttons">
-              <button type="button" class="preset-btn" data-preset="first-shift">1st Shift (8AM-4:30PM)</button>
-              <button type="button" class="preset-btn" data-preset="second-shift">2nd Shift (9AM-5:30PM)</button>
-              <button type="button" class="preset-btn" data-preset="third-shift">3rd Shift (11:30AM-8PM)</button>
-              <button type="button" class="preset-btn custom active" data-preset="custom">Custom</button>
+              <button type="button" class="preset-btn preset-btn-sm" data-preset="first-shift">1st Shift (8AM-4:30PM)</button>
+              <button type="button" class="preset-btn preset-btn-sm" data-preset="second-shift">2nd Shift (9AM-5:30PM)</button>
+              <button type="button" class="preset-btn preset-btn-sm" data-preset="third-shift">3rd Shift (11:30AM-8PM)</button>
+              <button type="button" class="preset-btn custom custom-btn preset-btn-sm active" data-preset="custom">Custom</button>
             </div>
           </div>
           <div class="shift-times-grid">
@@ -169,7 +169,7 @@
             <button type="submit" class="btn add-employee-btn">
               Add Employee
             </button>
-            <button type="button" id="clearFormBtn" class="btn clear-btn">
+            <button type="button" id="clearFormBtn" class="btn clear-all-btn">
               Clear Form
             </button>
           </div>
@@ -191,7 +191,7 @@
         <div class="employee-list-header">
           <h3>Employee List (<span id="employeeCount">0</span>/60)</h3>
           <div class="list-actions">
-            <button id="exportListBtn" class="btn export-btn">Export List</button>
+            <button id="exportListBtn" class="btn download-btn">Export List</button>
             <button id="clearAllBtn" class="btn clear-all-btn">Clear All</button>
           </div>
         </div>
@@ -204,12 +204,24 @@
 
       <!-- Generate Tracker -->
       <div class="generate-section">
-        <button id="generateTrackerBtn" class="btn generate-btn" disabled>
-          Generate Shift Tracker
-        </button>
+        <button id="generateTrackerBtn" class="btn download-btn">Download Shift Tracker</button>
         <div id="trackerOutput"></div>
       </div>
     </div>  </template>
+
+  <!-- Contact Page Section (boxed) -->
+  <div class="contact-container" style="display:none;">
+    <h2>Contact Me</h2>
+    <form class="contact-form">
+      <label for="contactName">Name</label>
+      <input type="text" id="contactName" name="name" required>
+      <label for="contactEmail">Email</label>
+      <input type="email" id="contactEmail" name="email" required>
+      <label for="contactMessage">Message</label>
+      <textarea id="contactMessage" name="message" required></textarea>
+      <button type="submit" class="btn generate-btn">Send Message</button>
+    </form>
+  </div>
 
   <!-- Application Scripts -->
   <script type="module" src="main.js"></script>

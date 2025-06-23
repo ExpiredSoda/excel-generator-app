@@ -4,21 +4,7 @@ import { escapeXml } from '../../core/index.js';
 import { STYLE_IDS, getCustomStyleId } from '../../../presentation/index.js';
 import { createTrackerColumns, generateColumnsXML, generateRowXML, ROW_HEIGHTS } from '../../../presentation/sizing/excelSizing.js';
 
-// Debug: Track successful imports and module loading
-console.log('✓ CalendarTracker imports loaded:', {
-  escapeXml: typeof escapeXml,
-  STYLE_IDS: typeof STYLE_IDS,
-  createTrackerColumns: typeof createTrackerColumns,
-  generateColumnsXML: typeof generateColumnsXML,
-  generateRowXML: typeof generateRowXML,
-  ROW_HEIGHTS: typeof ROW_HEIGHTS
-});
-
 export function getTrackerSheetXML(eventRows, legendValues = null) {
-  console.log('📊 CalendarTracker: Generating tracker sheet...', {
-    eventRows,
-    legendValuesProvided: !!legendValues
-  });
   const defaultLegendValues = [
     "Meeting", "Workout", "Appointment", "Holiday", "Personal",
     "Work", "Travel", "Study", "Event"

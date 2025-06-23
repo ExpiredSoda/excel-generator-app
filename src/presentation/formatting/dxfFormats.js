@@ -1,8 +1,6 @@
 // presentation/formatting/dxfFormats.js
 // DXF (Differential Formatting) for conditional formatting
 
-console.log('✓ DxfFormats: Module loaded');
-
 /**
  * Generate DXF elements for conditional formatting
  * @param {Array} customColors - Array of color strings for conditional formatting

@@ -1,8 +1,6 @@
 // presentation/styles/fills.js
 // Fill/background definitions for Excel styling
 
-console.log('✓ Fills: Module loaded');
-
 /**
  * Standard fill patterns for backgrounds
  */

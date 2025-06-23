@@ -4,18 +4,10 @@ import { escapeXml } from '../../core/index.js';
 import { STYLE_IDS } from '../../../presentation/index.js';
 import { createInstructionColumns, generateColumnsXML, generateRowXML, ROW_HEIGHTS } from '../../../presentation/sizing/excelSizing.js';
 
-// Debug: Track successful imports and module loading
-console.log('✓ AttendanceInstructions imports loaded:', {
-  escapeXml: typeof escapeXml,
-  STYLE_IDS: typeof STYLE_IDS,
-  createInstructionColumns: typeof createInstructionColumns,
-  generateColumnsXML: typeof generateColumnsXML,
-  generateRowXML: typeof generateRowXML,
-  ROW_HEIGHTS: typeof ROW_HEIGHTS
-});
+// Debug logs removed
 
 export function buildInstructionsSheet() {
-  console.log('📋 AttendanceInstructions: Building instructions sheet...');
+  // Debug logs removed
   const instructions = [
     'EMPLOYEE SHIFT TRACKER - INSTRUCTIONS',
     '',

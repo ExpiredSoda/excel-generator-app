@@ -1,8 +1,6 @@
 // excel/core/excelRow.js
 // Excel row representation and XML generation
 
-console.log('✓ ExcelRow: Module loaded');
-
 /**
  * Represents a single Excel row containing multiple cells
  */

@@ -1,8 +1,6 @@
 // excel/core/excelBuilder.js
 // Excel workbook builder pattern implementation
 
-console.log('✓ ExcelBuilder: Module loaded');
-
 /**
  * Builder pattern for creating Excel workbooks
  */
