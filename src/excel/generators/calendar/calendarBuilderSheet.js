@@ -161,9 +161,5 @@ export function buildCalendarSheetWithExcelBuilder(year, month, eventRows, inclu
   }
 
   let xml = sheet.toXML();
-  // Debug: check if conditional formatting XML is actually in the output
-  if (xml.includes('<conditionalFormatting')) {
-  }
-
   return xml;
 }

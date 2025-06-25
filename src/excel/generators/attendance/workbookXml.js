@@ -1,21 +1,24 @@
 // generators/attendance/workbookXml.js
 // Generates workbook structure XML for shift tracker (workbook only)
+import { escapeXml } from '../../core/index.js';
 
 // Debug logs removed
 
-export function getShiftTrackerWorkbookXML() {
-  // Debug logs removed
+export function getShiftTrackerWorkbookXML(shiftTrackerSheetName = "Shift Tracker") {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <sheets>
-    <sheet name="Shift Tracker" sheetId="1" r:id="rId1">
+    <sheet name="Instructions" sheetId="1" r:id="rId1">
+      <tabColor rgb="FF7030A0"/>
+    </sheet>
+    <sheet name="${escapeXml(shiftTrackerSheetName)}" sheetId="2" r:id="rId2">
       <tabColor rgb="FF20B388"/>
     </sheet>
-    <sheet name="Quick Reference" sheetId="2" r:id="rId2">
+    <sheet name="Quick Reference" sheetId="3" r:id="rId3">
       <tabColor rgb="FF4472C4"/>
     </sheet>
-    <sheet name="Instructions" sheetId="3" r:id="rId3">
-      <tabColor rgb="FF7030A0"/>
+    <sheet name="Legends" sheetId="4" r:id="rId4">
+      <tabColor rgb="FFFFC000"/>
     </sheet>
   </sheets>
 </workbook>`;
@@ -27,7 +30,8 @@ export function getShiftTrackerWorkbookRelsXML() {
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
   <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>
   <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet3.xml"/>
-  <Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+  <Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet4.xml"/>
+  <Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
 </Relationships>`;
 }
 

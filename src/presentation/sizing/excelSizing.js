@@ -104,7 +104,58 @@ export function createCalendarColumns() {
 }
 
 /**
- * Creates attendance tracker column layout
+ * Calculate optimal column width based on content length
+ * @param {string} content - Text content to measure
+ * @param {number} minWidth - Minimum width to ensure
+ * @param {number} maxWidth - Maximum width to cap at
+ * @returns {number} Optimal column width
+ */
+export function calculateOptimalWidth(content, minWidth = 10, maxWidth = 50) {
+  if (!content) return minWidth;
+  
+  // Excel width calculation approximation:
+  // - Each character is roughly 1.2 Excel units
+  // - Add padding for cell margins and formatting
+  const baseWidth = content.length * 1.2 + 2;
+  
+  // Ensure within bounds
+  return Math.max(minWidth, Math.min(maxWidth, baseWidth));
+}
+
+/**
+ * Calculate dynamic column widths for employee data
+ * @param {Array} employees - Array of employee objects
+ * @returns {Object} Column width configuration
+ */
+export function calculateEmployeeColumnWidths(employees = []) {
+  if (!employees || employees.length === 0) {
+    return {
+      name: COLUMN_WIDTHS.name,
+      title: COLUMN_WIDTHS.description,
+      email: COLUMN_WIDTHS.description,
+      phone: COLUMN_WIDTHS.medium
+    };
+  }
+  
+  // Find the longest content in each column
+  const maxLengths = employees.reduce((acc, emp) => {
+    acc.name = Math.max(acc.name, (emp.name || '').length);
+    acc.title = Math.max(acc.title, (emp.title || '').length);
+    acc.email = Math.max(acc.email, (emp.email || '').length);
+    acc.phone = Math.max(acc.phone, (emp.phone || '').length);
+    return acc;
+  }, { name: 0, title: 0, email: 0, phone: 0 });
+  
+  return {
+    name: calculateOptimalWidth('Employee Name', COLUMN_WIDTHS.name, 35), // Header or content, whichever is longer
+    title: calculateOptimalWidth('Job Title', Math.max(COLUMN_WIDTHS.description, maxLengths.title * 1.2 + 2), 40),
+    email: calculateOptimalWidth('Email Address', Math.max(COLUMN_WIDTHS.description, maxLengths.email * 1.2 + 2), 35),
+    phone: calculateOptimalWidth('Phone Number', Math.max(COLUMN_WIDTHS.medium, maxLengths.phone * 1.2 + 2), 20)
+  };
+}
+
+/**
+ * Creates attendance tracker column layout (original function for backward compatibility)
  * @returns {Array} Column definitions for attendance sheets
  */
 export function createAttendanceColumns() {
@@ -112,6 +163,36 @@ export function createAttendanceColumns() {
     { min: 1, max: 1, width: COLUMN_WIDTHS.name },              // Employee Name (20)
     { min: 2, max: 2, width: COLUMN_WIDTHS.standard },          // ID (10)
     { min: 3, max: 3, width: COLUMN_WIDTHS.description - 7 },   // Job Title (18)
+    { min: 4, max: 4, width: COLUMN_WIDTHS.wide + 2 },          // Shift Start (17)
+    { min: 5, max: 5, width: COLUMN_WIDTHS.wide + 2 },          // First Break (17)
+    { min: 6, max: 6, width: COLUMN_WIDTHS.wide + 2 },          // Lunch Break (17) 
+    { min: 7, max: 7, width: COLUMN_WIDTHS.wide + 3 },          // Second Break (18)
+    { min: 8, max: 8, width: COLUMN_WIDTHS.wide },              // Shift End (15)
+    { min: 9, max: 9, width: COLUMN_WIDTHS.standard },          // Monday (10)
+    { min: 10, max: 10, width: COLUMN_WIDTHS.standard },        // Tuesday (10)
+    { min: 11, max: 11, width: COLUMN_WIDTHS.standard },        // Wednesday (10)
+    { min: 12, max: 12, width: COLUMN_WIDTHS.standard },        // Thursday (10)
+    { min: 13, max: 13, width: COLUMN_WIDTHS.standard },        // Friday (10)
+    { min: 14, max: 14, width: COLUMN_WIDTHS.standard },        // Saturday (10)
+    { min: 15, max: 15, width: COLUMN_WIDTHS.standard },        // Sunday (10)
+    { min: 16, max: 16, width: COLUMN_WIDTHS.medium + 3 }       // Total Hours (15)
+  ];
+  
+  return createColumnDefinitions(columns);
+}
+
+/**
+ * Creates attendance tracker column layout with dynamic sizing
+ * @param {Array} employees - Employee data for width calculation
+ * @returns {Array} Column definitions for attendance sheets
+ */
+export function createAttendanceColumnsWithDynamicWidth(employees = []) {
+  const dynamicWidths = calculateEmployeeColumnWidths(employees);
+  
+  const columns = [
+    { min: 1, max: 1, width: dynamicWidths.name },               // Employee Name (dynamic)
+    { min: 2, max: 2, width: COLUMN_WIDTHS.standard },          // ID (10)
+    { min: 3, max: 3, width: dynamicWidths.title },             // Job Title (dynamic)
     { min: 4, max: 4, width: COLUMN_WIDTHS.wide + 2 },          // Shift Start (17)
     { min: 5, max: 5, width: COLUMN_WIDTHS.wide + 2 },          // First Break (17)
     { min: 6, max: 6, width: COLUMN_WIDTHS.wide + 2 },          // Lunch Break (17) 
@@ -155,8 +236,6 @@ export function createTrackerColumns() {
     { min: 3, max: 3, width: 50 }                      // Details/Notes (extra wide)
   ]);
 }
-
-
 
 /**
  * Generates XML for column definitions with auto-sizing support
@@ -265,9 +344,9 @@ export function applyAutoSizing(sheet, sheetType = 'standard', options = {}) {
     case 'calendar':
       columnDefs = createCalendarColumns();
       break;
-    case 'attendance':
-      columnDefs = createAttendanceColumns();
-      break;
+          case 'attendance':
+        columnDefs = createAttendanceColumns();
+        break;
     case 'tracker':
       columnDefs = createTrackerColumns();
       break;
@@ -313,3 +392,44 @@ export function applyAutoSizing(sheet, sheetType = 'standard', options = {}) {
  * This is why auto-height appears to "not work" during generation - it's working correctly,
  * but only becomes visible after opening in Excel.
  */
+
+/**
+ * Calculate dynamic column widths for reference sheet
+ * @param {Array} employees - Array of employee objects
+ * @param {Array} legends - Array of legend objects
+ * @returns {Object} Column width configuration for reference sheet
+ */
+export function calculateReferenceSheetWidths(employees = [], legends = []) {
+  const employeeWidths = calculateEmployeeColumnWidths(employees);
+  
+  // Calculate legend column widths
+  const maxLegendLabelLength = legends.reduce((max, legend) => 
+    Math.max(max, (legend.label || '').length), 0);
+  
+  // Headers to consider for minimum widths
+  const headers = {
+    employee: 'Employee',
+    shiftHours: 'Shift Hours', 
+    dailyTotal: 'Daily Total',
+    email: 'Email',
+    legend: 'Legend',
+    usage: 'Usage',
+    percentage: '%'
+  };
+  
+  return {
+    // Employee data columns (A-D)
+    employee: Math.max(employeeWidths.name, calculateOptimalWidth(headers.employee, 15, 35)),
+    shiftHours: calculateOptimalWidth('9:00 AM - 5:00 PM', Math.max(COLUMN_WIDTHS.description, calculateOptimalWidth(headers.shiftHours)), 25),
+    dailyTotal: calculateOptimalWidth('8.5 hours', Math.max(COLUMN_WIDTHS.medium, calculateOptimalWidth(headers.dailyTotal)), 18),
+    email: Math.max(employeeWidths.email, calculateOptimalWidth(headers.email, 20, 35)),
+    
+    // Spacer column (E)
+    spacer: 3,
+    
+    // Legend usage columns (F-H)
+    legend: Math.max(calculateOptimalWidth('Legend', 12, 30), calculateOptimalWidth('X'.repeat(maxLegendLabelLength), 12, 30)),
+    usage: calculateOptimalWidth('Usage', 10, 15),
+    percentage: calculateOptimalWidth('100%', 8, 12)
+  };
+}

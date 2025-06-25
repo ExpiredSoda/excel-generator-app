@@ -38,8 +38,24 @@
       <!-- ...existing code for dynamic content/templates... -->
     </main>
   </div>
+  <template id="calendarIntroTemplate">
+    <section class="modern-container-tool" style="margin-bottom: 32px; text-align: center; max-width: 500px;">
+      <h2 style="font-weight: 800; margin-bottom: 18px;">Smart Calendar Builder</h2>
+      <p style="margin-bottom: 18px;">
+        Create a professional, color-coded calendar in seconds. Customize event categories, colors, and more—no Excel skills required. Download your calendar instantly, 100% free and private.
+      </p>
+      <ul style="text-align: left; display: inline-block; margin-bottom: 24px;">
+        <li>Choose your year and month</li>
+        <li>Customize event categories and colors</li>
+        <li>Preview your calendar instantly</li>
+        <li>Download your Excel file—no sign-up required</li>
+      </ul>
+      <br />
+      <button id="startCalendarBuilderBtn" class="btn generate-btn" aria-label="Start Building Calendar" style="margin-top: 18px;">Start Building</button>
+    </section>
+  </template>
+
   <template id="calendarPageTemplate">
-    <h2><span class="heading-icon-circle"><img src="images/Calendar Pencil Icon.svg" alt="Calendar" style="width:28px;height:28px;"></span>Smart Calendar Builder</h2>
     <form id="calendarForm">
       <div class="form-row">
         <div class="form-group">
@@ -84,16 +100,215 @@
         </div>
       </div>
       <div id="legendFieldsContainer"></div>
-      <div class="form-actions">        <button type="submit" class="btn generate-btn"><img src="images/Calendar Pencil Icon.svg" alt="Generate" style="width:22px;margin-right:8px;">Generate Calendar</button>
+      <div class="form-actions">
+        <button type="submit" class="btn generate-btn"><img src="images/Calendar Pencil Icon.svg" alt="Generate" style="width:22px;margin-right:8px;">Generate Calendar</button>
         <button type="button" id="downloadBtn" class="btn download-btn" style="display:none;"><img src="images/Download Icon.svg" alt="Download" style="width:22px;margin-right:8px;">Download Excel</button>
       </div>
       <div id="output"></div>
     </form>
+    <div id="calendarPreview"></div>
+  </template>
+
+  <template id="attendanceIntroTemplate">
+    <section class="modern-container-tool" style="margin-bottom: 32px; text-align: center; max-width: 500px;">
+      <h2 style="font-weight: 800; margin-bottom: 18px;">Attendance Tracker</h2>
+      <p style="margin-bottom: 18px;">
+        The Attendance Tracker tool helps you build a professional Excel file for any month you choose. Add employees individually or in bulk via CSV upload, customize their details, and optionally enable a heatmap to visualize attendance patterns. Perfect for teams of any size, this tool makes tracking shifts and attendance easy, flexible, and private.
+      </p>
+      <ul style="text-align: left; display: inline-block; margin-bottom: 24px;">
+        <li>Select your month and year</li>
+        <li>Add employees one by one or upload a CSV</li>
+        <li>Customize employee details and shift times</li>
+        <li>Optionally enable a heatmap for quick visual insights</li>
+        <li>Download your Excel file instantly—no sign-up required</li>
+      </ul>
+      <br />
+      <button id="startAttendanceBuilderBtn" class="btn generate-btn" aria-label="Start Building Attendance Tracker" style="margin-top: 18px;">Start Building</button>
+    </section>
+    
+    <!-- CSV Import Instructions Section -->
+    <section class="modern-container-text csv-instructions" style="margin-bottom: 32px; text-align: left; max-width: 600px;">
+      <h3 style="font-weight: 700; margin-bottom: 16px; color: #20b388;">💡 Bulk Import from Excel or CSV</h3>
+      <p style="margin-bottom: 16px; color: #495057;">
+        Need to import employee data from an existing spreadsheet? You have two options:
+      </p>
+      
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-weight: 600; margin-bottom: 10px; color: #2c3e50;">📋 Option 1: Use Our Template</h4>
+        <p style="margin-bottom: 12px; font-size: 14px;">Download our CSV template and copy your employee information into it:</p>
+        <ul style="font-size: 14px; color: #6c757d; margin-bottom: 16px;">
+          <li><strong>Name</strong> (required) - Employee full name</li>
+          <li><strong>ID</strong> - Employee ID or badge number</li>
+          <li><strong>Email</strong> - Email address</li>
+          <li><strong>Title</strong> - Job title or position</li>
+          <li><strong>Phone</strong> - Phone number</li>
+          <li><strong>Shift Start</strong> - Start time (9:00 AM or 09:00)</li>
+          <li><strong>First Break, Lunch Break, Second Break</strong> - Break times</li>
+          <li><strong>Shift End</strong> - End time (5:00 PM or 17:00)</li>
+        </ul>
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-weight: 600; margin-bottom: 10px; color: #2c3e50;">📁 Option 2: Use Your Own File</h4>
+        <p style="margin-bottom: 12px; font-size: 14px;">If you already have employee data in Excel or CSV format:</p>
+        <ol style="font-size: 14px; color: #6c757d; margin-bottom: 16px;">
+          <li>Make sure your file has column headers (Employee Name, Job Title, etc.)</li>
+          <li>If using Excel: Save as <strong>CSV (Comma delimited)</strong> format</li>
+          <li>Upload your CSV file - our system will automatically map common column names</li>
+          <li>Review the import results and use Edit buttons to fix any missing data</li>
+        </ol>
+      </div>
+      
+      <div style="background: #e7f3ff; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #b3d9ff;">
+        <p style="margin: 0; font-size: 14px; color: #0066cc;">
+          <strong>💪 Flexible Import:</strong> Only employee names are required! Missing data can be edited later using the Edit button.
+        </p>
+      </div>
+      
+      <div style="background: #fff3cd; padding: 12px; border-radius: 6px; border: 1px solid #ffeaa7;">
+        <p style="margin: 0; font-size: 14px; color: #856404;">
+          <strong>📊 Import Report:</strong> If there are any issues during import, you'll get a detailed report showing exactly what couldn't be imported and why.
+        </p>
+      </div>
+    </section>
+  </template>
+
+  <template id="attendanceDateSelectionTemplate">
+    <!-- Month/Year Selection Container -->
+    <section class="modern-container-tool" style="margin-bottom: 32px;">
+      <h3 style="font-weight: 700; margin-bottom: 18px; text-align: center;">Select Month & Year</h3>
+      <div class="form-row" style="justify-content: center; gap: 20px;">
+        <div class="form-group" style="min-width: 150px;">
+          <label for="attendanceMonthSelect">Month</label>
+          <select id="attendanceMonthSelect" style="width: 100%;">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+          </select>
+        </div>
+        <div class="form-group" style="min-width: 120px;">
+          <label for="attendanceYearSelect">Year</label>
+          <select id="attendanceYearSelect" style="width: 100%;">
+            <option value="2024">2024</option>
+            <option value="2025" selected>2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Date Range Options Container -->
+    <section class="modern-container-tool" style="margin-bottom: 32px;">
+      <h3 style="font-weight: 700; margin-bottom: 18px; text-align: center;">Choose Date Range</h3>
+      <div class="date-range-options" style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
+        <button type="button" class="date-range-btn" data-range="full">
+          <span class="btn-icon">📅</span>
+          <span class="btn-text">Full Month</span>
+        </button>
+        <button type="button" class="date-range-btn" data-range="workdays">
+          <span class="btn-icon">💼</span>
+          <span class="btn-text">Work Days Only</span>
+        </button>
+        <button type="button" class="date-range-btn" data-range="custom">
+          <span class="btn-icon">✏️</span>
+          <span class="btn-text">Custom Selection</span>
+        </button>
+      </div>
+      <div id="dateRangeInfo" style="text-align: center; font-size: 14px; color: #666; min-height: 20px;"></div>
+    </section>
+
+    <!-- Calendar Preview (centered, under Choose Date Range) -->
+    <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 32px;">
+      <div id="attendanceCalendarPreview" style="max-width: 1100px; width: 100%;"></div>
+    </div>
+
+    <!-- Live Legend Color Preview in a container -->
+    <section class="modern-container-tool" id="legendColorPreviewContainer" style="margin-bottom: 32px; padding: 18px 24px; text-align: center;">
+      <div id="legendColorPreview"></div>
+    </section>
+
+    <!-- Legends Container -->
+    <section class="modern-container-tool" id="legendsContainer" style="margin-bottom: 32px;">
+      <h3 style="font-weight: 700; margin-bottom: 18px; text-align: center;">Absence & Attendance Codes</h3>
+      <p style="text-align: center; color: #666; margin-bottom: 18px;">Edit or add codes below. These will appear in a separate "Legend" sheet in your Excel file for easy reference.</p>
+      <form id="legendForm">
+        <div id="legendFields">
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#20b388; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#20b388" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="PTO (Personal Time Off)" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#228B22; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#228B22" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="VTO (Voluntary Time Off)" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#1E90FF; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#1E90FF" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="FMLA/ADA" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#FFA500; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#FFA500" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="Approved Leave of Absence" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#800080; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#800080" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="Excused Absence" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#FF6666; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#FF6666" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="Unexcused Absence" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#FFD700; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#FFD700" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="Late Arrival" maxlength="40">
+          </div>
+          <div class="legend-field-row">
+            <span class="legend-color-dot color-dot-picker" style="background:#4682B4; position: relative; cursor: pointer;">
+              <input type="color" class="legend-color-picker" value="#4682B4" style="opacity:0;position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer;">
+            </span>
+            <input type="text" class="legend-input" value="Early Departure" maxlength="40">
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <button type="button" id="addLegendBtn" class="btn">+ Add Custom Legend</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Continue Button -->
+    <div style="text-align: center;">
+      <button id="continueToFormBtn" class="btn generate-btn" disabled style="margin-top: 18px;">
+        Continue to Employee Form
+      </button>
+    </div>
   </template>
 
   <template id="attendancePageTemplate">
-    <h2><span class="heading-icon-circle"><img src="images/Checklist Icon.svg" alt="Attendance" style="width:28px;height:28px;"></span>Employee Shift Tracker</h2>
-      <!-- Employee Form Section -->
+    <!-- Employee Form Section -->
     <div class="attendance-container">
       <div class="employee-form-section">
         <h3>Add Employee</h3>
@@ -125,17 +340,11 @@
               <label for="employeePhone">Phone (Optional)</label>
               <input type="tel" id="employeePhone" placeholder="555-123-4567" maxlength="20">
             </div>
-            <div class="form-group">
-              <label for="employeeColor">Color Code</label>
-              <div style="position: relative;">
-                <input type="color" id="employeeColor" value="#4CAF50">
-                <div class="color-indicator" style="background-color: #4CAF50;"></div>
-              </div>
-            </div>
           </div>          <!-- Shift Times Section -->
           <h4>Shift Schedule</h4>
           <div class="shift-preset-container">
-            <label style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; display: block;">Quick Shift Templates:</label>            <div class="shift-preset-buttons">
+            <div style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; display: block;">Quick Shift Templates:</div>
+            <div class="shift-preset-buttons">
               <button type="button" class="preset-btn preset-btn-sm" data-preset="first-shift">1st Shift (8AM-4:30PM)</button>
               <button type="button" class="preset-btn preset-btn-sm" data-preset="second-shift">2nd Shift (9AM-5:30PM)</button>
               <button type="button" class="preset-btn preset-btn-sm" data-preset="third-shift">3rd Shift (11:30AM-8PM)</button>
@@ -183,6 +392,11 @@
             <p>Drop CSV/Excel file here or click to browse</p>
             <small>Supports up to 60 employees</small>
           </div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <button id="downloadTemplateBtn" class="btn" style="font-size: 14px; padding: 8px 16px;">
+            📥 Download CSV Template
+          </button>
         </div>
       </div>
 

@@ -23,7 +23,7 @@ export const BASE_CELL_FORMATS = [
   '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment horizontal="left" vertical="center"/></xf>', // 6 - INSTRUCTION_SPACER (default)
   '<xf numFmtId="0" fontId="10" fillId="0" borderId="0" xfId="0"><alignment horizontal="left" vertical="center"/></xf>', // 7 - INSTRUCTION_CALLOUT (gray text, no bg, left)
     // TABLE STYLES (8-17)
-  '<xf numFmtId="0" fontId="3" fillId="2" borderId="2" xfId="0"><alignment horizontal="left" vertical="center"/></xf>', // 8 - TABLE_TITLE (green bg + bottom border)
+  '<xf numFmtId="0" fontId="3" fillId="2" borderId="2" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 8 - TABLE_TITLE (green bg + bottom border, now centered)
   '<xf numFmtId="0" fontId="0" fillId="2" borderId="1" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 9 - TABLE_HEADER (green bg + all borders, BLACK TEXT)
   '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 10 - TABLE_DATA (plain + all borders)
   '<xf numFmtId="0" fontId="0" fillId="4" borderId="1" xfId="0"><alignment horizontal="center" vertical="center"/></xf>', // 11 - TABLE_INPUT (light blue + borders)

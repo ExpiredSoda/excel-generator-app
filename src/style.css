@@ -294,15 +294,13 @@ html {
 }
 
 .legend-color-picker {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border: none;
-  border-radius: 50%;
+  background: none;
+  margin-right: 8px;
   cursor: pointer;
-  outline: none;
-  opacity: 0;
-  position: absolute;
-  z-index: 2;
+  padding: 0;
 }
 
 .legend-color-indicator {
@@ -498,29 +496,6 @@ html {
 /* =========================
    Toast & Notification Styles
    ========================= */
-.calendar-toast {
-  visibility: hidden;
-  min-width: 320px;
-  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
-  color: #fff;
-  text-align: center;
-  border-radius: 8px;
-  padding: 18px 32px;
-  position: fixed;
-  left: 50%;
-  bottom: 48px;
-  transform: translateX(-50%);
-  z-index: 9999;
-  font-size: 1.08rem;
-  font-weight: 600;
-  box-shadow: 0 4px 24px rgba(32,179,136,0.18);
-  opacity: 0;
-  transition: opacity 0.4s, visibility 0.4s;
-}
-.calendar-toast.show {
-  visibility: visible;
-  opacity: 1;
-}
 
 /* =========================
    Attendance & Employee Tracker Styles
@@ -808,6 +783,7 @@ html {
   padding: 15px;
   border-bottom: 1px solid #f1f3f4;
   transition: background-color 0.2s ease;
+  position: relative;
 }
 
 .employee-card:hover {
@@ -1213,21 +1189,18 @@ html {
 /* =========================
    Calendar Builder & Preview Styles
    ========================= */
-.calendar-preview-section {
-  width: 100%;
-  max-width: 700px;
-  margin: 48px auto 0 auto;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(32,179,136,0.08);
-  padding: 32px 24px 24px 24px;
-  border: 1.5px solid #e1e8ed;
+.calendar-preview {
+  width: fit-content;
+  min-width: 600px;
+  margin: 0 auto;
+  padding: 48px 48px 36px 48px;
+  display: block;
 }
 .calendar-preview-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
+  background: #20b388;
   padding: 18px 0;
   border-radius: 8px 8px 0 0;
   margin: -32px -24px 18px -24px;
@@ -1236,6 +1209,8 @@ html {
 }
 .calendar-table {
   width: 100%;
+  min-width: 700px;
+  min-height: 500px;
   border-collapse: collapse;
   margin-bottom: 18px;
   background: #fff;
@@ -1244,11 +1219,9 @@ html {
   box-shadow: 0 1px 4px rgba(32,179,136,0.07);
 }
 .calendar-table th, .calendar-table td {
-  border: 1px solid #e1e8ed;
-  text-align: center;
-  padding: 8px 0;
-  min-width: 36px;
-  font-size: 1rem;
+  min-width: 56px;
+  height: 56px;
+  font-size: 1.15rem;
 }
 .calendar-table th {
   background: #20b388;
@@ -1353,10 +1326,10 @@ html {
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(32,179,136,0.10);
   padding: 14px 0;
-  background: linear-gradient(90deg, #20b388 60%, #45a049 100%);
+  background: #20b388;
 }
 .contact-form .btn:hover {
-  background: linear-gradient(90deg, #45a049 60%, #20b388 100%);
+  background: #1e9e6a;
   box-shadow: 0 4px 24px rgba(32,179,136,0.16);
   transform: translateY(-2px) scale(1.01);
 }
@@ -1387,5 +1360,358 @@ html {
 .preset-btn-sm.active {
   background: #20b388;
   color: white;
+  transform: translateY(-1px);
+}
+
+/* Modern Container Styles */
+.modern-container-tool,
+.modern-container-text {
+  max-width: var(--container-max-width, 700px);
+}
+
+.modern-container-tool {
+  margin: 48px auto 0 auto;
+  padding: 36px 32px 28px 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(32,179,136,0.10), 0 1.5px 8px rgba(32,179,136,0.04);
+  border: 1.5px solid #e1e8ed;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.modern-container-text {
+  margin: 40px auto 0 auto;
+  padding: 32px 28px 24px 28px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32,179,136,0.07);
+  border: 1.5px solid #e1e8ed;
+  color: #222;
+}
+
+/* =========================
+   Date Range Selection Styles
+   ========================= */
+.date-range-options {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.date-range-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border: 2px solid #e1e8ed;
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(32,179,136,0.04);
+}
+
+.date-range-btn:hover {
+  border-color: #20b388;
+  box-shadow: 0 4px 16px rgba(32,179,136,0.08);
+  transform: translateY(-2px);
+}
+
+.date-range-btn.active {
+  border-color: #20b388;
+  background: #f0f9f6;
+  box-shadow: 0 4px 16px rgba(32,179,136,0.12);
+}
+
+.date-range-btn .btn-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.date-range-btn .btn-text {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+.date-range-btn.active .btn-text {
+  color: #20b388;
+}
+
+#dateRangeInfo {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  min-height: 20px;
+  padding: 8px 0;
+}
+
+#continueToFormBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#continueToFormBtn:disabled:hover {
+  background: #20b388;
+  transform: none;
+  box-shadow: 0 2px 12px rgba(32,179,136,0.10);
+}
+
+/* Calendar Date Selection Styles */
+.calendar-date {
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calendar-date:hover {
+  background-color: #f0f9f6 !important;
+  transform: scale(1.05);
+}
+
+.calendar-date.selected {
+  background-color: #20b388 !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(32,179,136,0.3);
+}
+
+.calendar-date.selected:hover {
+  background-color: #1e9e6a !important;
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .date-range-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .date-range-btn {
+    min-width: 200px;
+  }
+}
+
+/* Add spacing below the date range container */
+.modern-container-tool + #attendanceCalendarPreview {
+  margin-top: 32px;
+}
+
+/* Unify calendar preview style with calendar builder */
+.calendar-preview {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(32,179,136,0.10), 0 1.5px 8px rgba(32,179,136,0.04);
+  border: 1.5px solid #e1e8ed;
+  padding: 40px 36px 32px 36px;
+  margin: 0 auto 24px auto;
+  max-width: 900px;
+}
+
+.calendar-preview-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  background: #20b388;
+  padding: 18px 0;
+  border-radius: 8px 8px 0 0;
+  margin: -32px -24px 18px -24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(32,179,136,0.07);
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(32,179,136,0.07);
+}
+
+.calendar-table th, .calendar-table td {
+  border: 1px solid #e1e8ed;
+  text-align: center;
+  padding: 8px 0;
+  min-width: 48px;
+  height: 48px;
+  font-size: 1.1rem;
+}
+
+.calendar-table th {
+  background: #20b388;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* Legend Fields Styles */
+#legendsContainer {
+  max-width: 500px;
+  margin: 0 auto 32px auto;
+  padding: 32px 28px 24px 28px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(32,179,136,0.07);
+  border: 1.5px solid #e1e8ed;
+}
+#legendFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.legend-field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.legend-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid #d1e7dd;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1.5px 6px rgba(32,179,136,0.04);
+}
+.legend-input:focus {
+  border-color: #20b388;
+  box-shadow: 0 0 0 2px rgba(32,179,136,0.10);
+  outline: none;
+  background: #fff;
+}
+#addLegendBtn {
+  margin-top: 8px;
+  font-size: 1.12rem;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(32,179,136,0.10);
+  padding: 14px 0;
+  background: #20b388;
+  color: #fff;
+  transition: background 0.2s, color 0.2s;
+  min-width: 220px;
+  letter-spacing: 0.5px;
+}
+#addLegendBtn:hover {
+  background: #1e9e6a;
+  color: #fff;
+}
+
+/* Legend Color Picker Styles */
+.legend-color-picker {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  margin-right: 8px;
+  cursor: pointer;
+  padding: 0;
+}
+.legend-color-dot {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #e1e8ed;
+  vertical-align: middle;
+  transition: background 0.2s, border 0.2s;
+}
+.legend-field-row {
+  align-items: center;
+}
+
+/* =========================
+   Upload Section & Import Report
+   ========================= */
+.upload-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+#downloadImportReportBtn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: none;
+  animation: slideIn 0.3s ease-out;
+}
+
+#downloadImportReportBtn:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.btn-secondary {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+}
+
+.btn-secondary:hover {
+  background: #5a6268 !important;
+  border-color: #545b62 !important;
+}
+
+/* Employee cards that need attention */
+.employee-card.needs-attention {
+  border: 2px solid #dc3545;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.15);
+}
+
+.employee-card.needs-attention::before {
+  content: "⚠️ Needs Attention";
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  background: #dc3545;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.employee-card.needs-attention .employee-details h4 {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Enhanced hover effect for attention cards */
+.employee-card.needs-attention:hover {
+  border-color: #c82333;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
   transform: translateY(-1px);
 }

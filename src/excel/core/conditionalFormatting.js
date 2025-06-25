@@ -3,8 +3,6 @@
 
 import { escapeXml } from './xmlUtils.js';
 
-console.log('✓ ConditionalFormatting: Module loaded');
-
 /**
  * Represents a conditional formatting rule for Excel cells
  */

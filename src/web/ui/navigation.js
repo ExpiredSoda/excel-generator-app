@@ -34,8 +34,7 @@ export function showPage(page, mainContent) {
       module.setupHomepage(mainContent);
     });
   } else if (page === 'calendar') {
-    // Use the template for the calendar builder page
-    const template = document.getElementById('calendarPageTemplate');
+    const template = document.getElementById('calendarIntroTemplate');
     if (template) {
       mainContent.innerHTML = template.innerHTML;
     } else {
@@ -43,30 +42,14 @@ export function showPage(page, mainContent) {
       return;
     }
     setTimeout(async () => {
-      // Dynamically import dependencies as in main.js
       const { setupCalendarBuilder } = await import('./calendarBuilder.js');
-      const { buildCalendarSheetWithExcelBuilder } = await import('../../excel/generators/calendar/calendarBuilderSheet.js');
-      const { getCalendarStylesXML } = await import('../../excel/generators/calendar/stylesXml.js');
-      const { getContentTypesXML, getRelsXML } = await import('../../excel/generators/calendar/contentTypesXml.js');
-      const { getSheet1InstructionsXML } = await import('../../excel/generators/calendar/instructionsSheet.js');
-      const { getWorkbookXML, getWorkbookRelsXML } = await import('../../excel/generators/calendar/workbookXml.js');
-      const { createZip } = await import('../../excel/utils/zipUtils.js');
-      setupCalendarBuilder({
-        buildCalendarSheetWithExcelBuilder,
-        getCalendarStylesXML,
-        getContentTypesXML,
-        getRelsXML,
-        getWorkbookXML,
-        getWorkbookRelsXML,
-        getSheet1InstructionsXML,
-        createZip
-      });
+      setupCalendarBuilder();
     }, 0);
   } else if (page === 'attendance') {
-    mainContent.innerHTML = document.getElementById('attendancePageTemplate').innerHTML;
+    mainContent.innerHTML = document.getElementById('attendanceIntroTemplate').innerHTML;
     setTimeout(() => {
       import('./attendanceTracker.js').then(module => {
-        module.setupAttendanceTracker();
+        module.setupAttendanceBuilderPage();
       });
     }, 0);
   } else if (page === 'meeting') {

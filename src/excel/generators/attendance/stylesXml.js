@@ -4,8 +4,8 @@ import { getUniversalStylesXML } from '../../../presentation/index.js';
 
 // Debug logs removed
 
-export function getShiftTrackerStylesXML() {
+export function getShiftTrackerStylesXML(customColors = []) {
   // Debug logs removed
-  // Use universal style system - no custom colors needed for attendance tracker
-  return getUniversalStylesXML([]);
+  // Use universal style system, passing customColors for dynamic fills/styles
+  return getUniversalStylesXML(customColors);
 }
