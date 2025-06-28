@@ -10,10 +10,21 @@ export function setupHomepage(mainContent) {
       </p>
     </section>
     <section class="modern-container-tool" style="--container-max-width: 750px; text-align: center;">
+      <h3 class="homepage-updates-title">📈 Recent Updates</h3>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 18px 0 18px 0; font-size: 1.1rem; color: #28a745;">
+        <div style="display: flex; align-items: center; gap: 8px;"><span>✅</span><span>Attendance Tracker now fully functional with dynamic chart visualization</span></div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span>✅</span><span>Calendar Builder section completely updated and optimized</span></div>
+      </div>
+    </section>
+    
+    <section class="modern-container-tool" style="--container-max-width: 750px; text-align: center;">
       <h3 class="homepage-updates-title">🔧 What's Coming Next</h3>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 18px 0 18px 0; font-size: 1.15rem;">
-        <div style="display: flex; align-items: center; gap: 8px;"><span>🆕</span><span>Attendance Tracker (coming soon!)</span></div>
-        <div style="display: flex; align-items: center; gap: 8px;"><span>✨</span><span>Improved styling and theme options</span></div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span>🗂️</span><span>Portable Case Management System</span></div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #666; font-style: italic; max-width: 600px; text-align: center;">
+          <span>A front-end only solution where Excel acts as your portable database—no accounts, no cloud dependency. Create and manage cases locally, upload your file to continue where you left off. Think of it like having a digital filing cabinet that travels with you.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span>✨</span><span>Enhanced styling and theme customization options</span></div>
         <div style="display: flex; align-items: center; gap: 8px;"><span>📩</span><span>User-suggested features for all tools</span></div>
       </div>
       <p class="homepage-updates-contact">

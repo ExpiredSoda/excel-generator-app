@@ -53,7 +53,31 @@ export function showPage(page, mainContent) {
       });
     }, 0);
   } else if (page === 'meeting') {
-    mainContent.innerHTML = `<h2>Meeting Tracker</h2><p>Coming soon! Create meeting tracking sheets here.</p>`;
+          mainContent.innerHTML = `
+        <section class="modern-container-tool" style="--container-max-width: 800px; text-align: center;">
+          <h2 style="color: #20b388; margin-bottom: 24px;">📁 Case Manager</h2>
+          <div style="background: #f8f9fa; padding: 32px; border-radius: 12px; margin-bottom: 24px;">
+            <h3 style="color: #333; margin-bottom: 16px;">🚧 Coming Soon!</h3>
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.6; margin-bottom: 20px;">
+              A revolutionary front-end case management system where <strong>Excel acts as your portable database</strong>. 
+              No accounts, no cloud dependency—just pure, portable data control.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 24px 0;">
+              <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #20b388;">
+                <h4 style="color: #20b388; margin-bottom: 8px;">🆕 New Users</h4>
+                <p style="color: #666; font-size: 0.95rem;">Start fresh with a guided case creation wizard</p>
+              </div>
+              <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                <h4 style="color: #17a2b8; margin-bottom: 8px;">🔄 Returning Users</h4>
+                <p style="color: #666; font-size: 0.95rem;">Upload your Excel file to continue where you left off</p>
+              </div>
+            </div>
+            <p style="font-style: italic; color: #888; font-size: 0.9rem;">
+              Think of it like having a digital filing cabinet that travels with you—no vendor lock-in, no lost access.
+            </p>
+          </div>
+        </section>
+      `;
   } else if (page === 'contact') {
     mainContent.innerHTML = `
       <div class="contact-container">

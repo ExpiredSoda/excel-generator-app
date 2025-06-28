@@ -159,7 +159,9 @@ export function buildReferenceSheet(employees, legends = [], sheetName = "Shift 
     mergesXML = `<mergeCells count="1"><mergeCell ref="A1:D1"/></mergeCells>`;
   }
 
-  // Simple worksheet without any drawing/chart references
+  // Add drawing reference for chart
+  const drawingXML = legends && legends.length > 0 ? '<drawing r:id="rId1"/>' : '';
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   ${colsXML}
@@ -170,5 +172,6 @@ export function buildReferenceSheet(employees, legends = [], sheetName = "Shift 
     ${employeeRowsXML}
   </sheetData>
   ${mergesXML}
+  ${drawingXML}
 </worksheet>`;
 }

@@ -417,8 +417,8 @@ export class AttendanceTracker {
   deleteEmployee(index) {
     const employee = this.employees[index];
     this.showToast(
-      `${employee.name} deleted successfully`,
-      'success'
+      'success',
+      `${employee.name} deleted successfully!`
     );
     this.employees.splice(index, 1);
     this.saveEmployees();
@@ -468,8 +468,8 @@ export class AttendanceTracker {
   clearAllEmployees() {
     if (arguments[0] !== 'silent') {
       this.showToast(
-        `All employees and saved data cleared`,
-        'success'
+        'success',
+        'All employees and saved data cleared!'
       );
     }
     this.employees = [];
@@ -1185,10 +1185,12 @@ export class AttendanceTracker {
       const { buildReferenceSheet } = await import('../../excel/generators/attendance/referenceSheet.js');
       const { buildInstructionsSheet } = await import('../../excel/generators/attendance/instructionsSheet.js');
       const { getShiftTrackerStylesXML } = await import('../../excel/generators/attendance/stylesXml.js');
-      const { getShiftTrackerWorkbookXML, getShiftTrackerWorkbookRelsXML } = await import('../../excel/generators/attendance/workbookXml.js');
+      const { getShiftTrackerWorkbookXML, getShiftTrackerWorkbookRelsXML, getSheetDrawingRelsXML, getDrawingChartRelsXML } = await import('../../excel/generators/attendance/workbookXml.js');
       const { getShiftTrackerContentTypesXML, getShiftTrackerRelsXML } = await import('../../excel/generators/attendance/contentTypesXml.js');
       const { createZip } = await import('../../excel/utils/zipUtils.js');
       const { buildLegendSheet } = await import('../../excel/generators/attendance/legendSheet.js');
+      const { buildAttendanceChart, buildChartColorsXml, buildChartStyleXml } = await import('../../excel/generators/attendance/chartXml.js');
+      const { buildDrawingXml } = await import('../../excel/generators/attendance/drawingXml.js');
 
       // Get date configuration
       const yearInput = document.getElementById('yearInput');
@@ -1243,6 +1245,30 @@ export class AttendanceTracker {
       const contentTypesXML = getShiftTrackerContentTypesXML();
       const relsXML = getShiftTrackerRelsXML();
 
+      // Generate chart files if legends exist
+      let chartFiles = [];
+      if (legendObjs.length > 0) {
+        try {
+          const chartXML = buildAttendanceChart(legendObjs, 'Quick Reference');
+          const drawingXML = buildDrawingXml();
+          const chartColorsXML = buildChartColorsXml();
+          const chartStyleXML = buildChartStyleXml();
+          const sheetDrawingRelsXML = getSheetDrawingRelsXML();
+          const drawingChartRelsXML = getDrawingChartRelsXML();
+
+          chartFiles = [
+            { name: 'xl/charts/chart1.xml', content: chartXML },
+            { name: 'xl/drawings/drawing1.xml', content: drawingXML },
+            { name: 'xl/charts/colors1.xml', content: chartColorsXML },
+            { name: 'xl/charts/style1.xml', content: chartStyleXML },
+            { name: 'xl/worksheets/_rels/sheet3.xml.rels', content: sheetDrawingRelsXML },
+            { name: 'xl/drawings/_rels/drawing1.xml.rels', content: drawingChartRelsXML }
+          ];
+        } catch (chartError) {
+          console.warn('Chart generation failed, continuing without chart:', chartError.message);
+        }
+      }
+
       // Create files array
       const files = [
         { name: 'xl/worksheets/sheet1.xml', content: instructionsSheet },
@@ -1253,7 +1279,8 @@ export class AttendanceTracker {
         { name: 'xl/workbook.xml', content: workbookXML },
         { name: 'xl/_rels/workbook.xml.rels', content: workbookRelsXML },
         { name: '[Content_Types].xml', content: contentTypesXML },
-        { name: '_rels/.rels', content: relsXML }
+        { name: '_rels/.rels', content: relsXML },
+        ...chartFiles
       ];
 
       // Create and download Excel file
